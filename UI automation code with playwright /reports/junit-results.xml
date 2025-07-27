@@ -1,0 +1,160 @@
+<testsuites id="" name="" tests="4" failures="1" skipped="3" errors="0" time="182.70307499999998">
+<testsuite name="simple-healthcare-workflow.spec.ts" timestamp="2025-07-27T11:02:37.060Z" hostname="chromium" tests="4" failures="1" skipped="3" time="177.842" errors="0">
+<testcase name="Healthcare Workflow Tests › 1. Login and Create Provider" classname="simple-healthcare-workflow.spec.ts" time="177.842">
+<failure message="simple-healthcare-workflow.spec.ts:48:7 1. Login and Create Provider" type="FAILURE">
+<![CDATA[  [chromium] › simple-healthcare-workflow.spec.ts:48:7 › Healthcare Workflow Tests › 1. Login and Create Provider 
+
+    TimeoutError: page.waitForLoadState: Timeout 90000ms exceeded.
+
+      54 |     await page.getByRole('textbox', { name: '*********' }).fill('Pass@123');
+      55 |     await page.getByRole('button', { name: 'Let\'s get Started' }).click();
+    > 56 |     await page.waitForLoadState('networkidle');
+         |                ^
+      57 |     
+      58 |     // Navigate to providers
+      59 |     await page.getByRole('banner').getByTestId('KeyboardArrowRightIcon').click();
+        at /Users/ttpl-mac-013/Desktop/24th JULY session task/qa-ai-suit-15/UI automation code with playwright /tests/simple-healthcare-workflow.spec.ts:56:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: locator.fill: Timeout 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('textbox', { name: 'Date of Birth' })
+
+
+      68 |     await page.getByRole('textbox', { name: 'Email *' }).fill(testData.provider.email);
+      69 |     await page.locator('input[name="npi"]').fill(testData.provider.npiNumber);
+    > 70 |     await page.getByRole('textbox', { name: 'Date of Birth' }).fill(testData.provider.dateOfBirth);
+         |                                                                ^
+      71 |     await page.getByRole('textbox', { name: 'Phone Number' }).fill(testData.provider.phoneNumber);
+      72 |     
+      73 |     // Select gender
+        at /Users/ttpl-mac-013/Desktop/24th JULY session task/qa-ai-suit-15/UI automation code with playwright /tests/simple-healthcare-workflow.spec.ts:70:64
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[🚀 Healthcare Test Automation Framework v1.0.0
+👨‍💻 Developed by: Sainath Gaikwad - QA Core Team
+📋 Running Healthcare Management Workflow Tests
+═══════════════════════════════════════════════
+Generated test data: {
+  provider: {
+    firstName: [32m'Dr John'[39m,
+    lastName: [32m'Smith'[39m,
+    email: [32m'provider1753614157805@test.com'[39m,
+    npiNumber: [32m'12341753614157805'[39m,
+    dateOfBirth: [32m'01/15/1980'[39m,
+    phoneNumber: [32m'5551753614157805'[39m,
+    gender: [32m'Male'[39m
+  },
+  patient: {
+    firstName: [32m'Jane'[39m,
+    lastName: [32m'Doe'[39m,
+    email: [32m'patient1753614157805@test.com'[39m,
+    dateOfBirth: [32m'05/20/1990'[39m,
+    phoneNumber: [32m'4441753614157805'[39m,
+    gender: [32m'Female'[39m
+  }
+}
+═══════════════════════════════════════════════
+🎉 Healthcare Workflow Tests Completed Successfully!
+📊 Framework: Healthcare Test Automation v1.0.0
+👨‍💻 Built by: Sainath Gaikwad - QA Core Team
+═══════════════════════════════════════════════
+
+[[ATTACHMENT|../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium/error-context.md]]
+
+[[ATTACHMENT|../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium/trace.zip]]
+🚀 Healthcare Test Automation Framework v1.0.0
+👨‍💻 Developed by: Sainath Gaikwad - QA Core Team
+📋 Running Healthcare Management Workflow Tests
+═══════════════════════════════════════════════
+Generated test data: {
+  provider: {
+    firstName: [32m'Dr John'[39m,
+    lastName: [32m'Smith'[39m,
+    email: [32m'provider1753614262681@test.com'[39m,
+    npiNumber: [32m'12341753614262681'[39m,
+    dateOfBirth: [32m'01/15/1980'[39m,
+    phoneNumber: [32m'5551753614262681'[39m,
+    gender: [32m'Male'[39m
+  },
+  patient: {
+    firstName: [32m'Jane'[39m,
+    lastName: [32m'Doe'[39m,
+    email: [32m'patient1753614262681@test.com'[39m,
+    dateOfBirth: [32m'05/20/1990'[39m,
+    phoneNumber: [32m'4441753614262681'[39m,
+    gender: [32m'Female'[39m
+  }
+}
+═══════════════════════════════════════════════
+🎉 Healthcare Workflow Tests Completed Successfully!
+📊 Framework: Healthcare Test Automation v1.0.0
+👨‍💻 Built by: Sainath Gaikwad - QA Core Team
+═══════════════════════════════════════════════
+
+[[ATTACHMENT|../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../test-results/simple-healthcare-workflow-57689-1-Login-and-Create-Provider-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Healthcare Workflow Tests › 2. Create Patient" classname="simple-healthcare-workflow.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Healthcare Workflow Tests › 3. Set Provider Availability" classname="simple-healthcare-workflow.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Healthcare Workflow Tests › 4. Book Appointment" classname="simple-healthcare-workflow.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

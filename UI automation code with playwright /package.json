@@ -1,0 +1,68 @@
+{
+  "name": "healthcare-test-automation",
+  "version": "1.0.0",
+  "description": "Professional end-to-end test automation framework for healthcare management workflows",
+  "author": "Sainath Gaikwad - QA Core Team",
+  "team": "QA Core",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test tests/simple-healthcare-workflow.spec.ts --reporter=html",
+    "test:simple": "npx playwright test tests/simple-healthcare-workflow.spec.ts --reporter=html",
+    "test:all": "npx playwright test --reporter=html",
+    "test:debug": "npx playwright test --headed --debug",
+    "test:chrome": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox", 
+    "test:safari": "npx playwright test --project=webkit",
+    "test:parallel": "npx playwright test --workers=4",
+    "test:serial": "npx playwright test --workers=1",
+    "install:browsers": "npx playwright install",
+    "report:show": "npx playwright show-report",
+    "report:open": "npx playwright show-report --host=0.0.0.0 --port=9323",
+    "lint": "npx eslint src/ test-suites/ --ext .ts",
+    "lint:fix": "npx eslint src/ test-suites/ --ext .ts --fix",
+    "type:check": "npx tsc --noEmit",
+    "clean": "rm -rf test-results/ playwright-report/ reports/",
+    "setup": "npm install && npx playwright install && npm run type:check",
+    "ci:test": "npx playwright test --reporter=json,html --workers=2",
+    "dev:record": "npx playwright codegen",
+    "dev:trace": "npx playwright show-trace"
+  },
+  "keywords": [
+    "playwright",
+    "typescript", 
+    "test-automation",
+    "healthcare",
+    "e2e-testing",
+    "page-object-model",
+    "qa-automation"
+  ],
+  "author": {
+    "name": "Senior QA Automation Engineer",
+    "email": "qa-team@company.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/company/healthcare-test-automation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/company/healthcare-test-automation/issues"
+  },
+  "homepage": "https://github.com/company/healthcare-test-automation#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.1",
+    "@types/node": "^24.0.13",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@playwright/test": "^1.54.0"
+  }
+}
