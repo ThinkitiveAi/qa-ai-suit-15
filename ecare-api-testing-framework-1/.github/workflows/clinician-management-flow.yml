@@ -20,7 +20,7 @@ jobs:
           node-version: '18'
 
       - name: List files for debug
-        run: ls -R
+        run: ls -l
         working-directory: .
 
       - name: Install dependencies
