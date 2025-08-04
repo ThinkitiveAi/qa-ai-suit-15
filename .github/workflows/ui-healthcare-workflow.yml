@@ -36,7 +36,7 @@ jobs:
         working-directory: UI automation code with playwright
 
       - name: Run Playwright tests (skip failing)
-        run: npx playwright test tests/healthcare-workflow-legacy.spec.ts --grep-invert 'Book Appointment|Provider Creation'
+        run: npx playwright test tests/healthcare-workflow-legacy.spec.ts --grep-invert 'Provider Created'
         working-directory: UI automation code with playwright
 
       - name: Upload Playwright report
