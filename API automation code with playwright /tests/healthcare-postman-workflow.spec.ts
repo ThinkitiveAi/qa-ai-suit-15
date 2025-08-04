@@ -15,10 +15,15 @@ test.describe('Healthcare API Workflow - Based on Postman Collection', () => {
     const results = await workflow.executeCompleteWorkflow();
 
     // Verify Login
-    expect(results.loginResponse.data?.accessToken).toBeTruthy();
+    console.log('Login response:', JSON.stringify(results.loginResponse, null, 2));
+    expect(results.loginResponse.data?.access_token).toBeTruthy();
     console.log('✅ Login verification passed');
 
     // Verify Patient Creation
+    console.log('Patient creation response:', JSON.stringify(results.patientResponse, null, 2));
+    if (!results.patientResponse.data?.id) {
+      throw new Error('Patient creation failed: ' + JSON.stringify(results.patientResponse, null, 2));
+    }
     expect(results.patientResponse.data?.id).toBeTruthy();
     expect(results.patientResponse.data?.firstName).toBe('Samuel');
     expect(results.patientResponse.data?.lastName).toBe('Peterson');
@@ -57,7 +62,7 @@ test.describe('Healthcare API Workflow - Based on Postman Collection', () => {
       'rose.gomez@jourrapide.com',
       'Pass@123'
     );
-    expect(loginResponse.data?.accessToken).toBeTruthy();
+    expect(loginResponse.data?.access_token).toBeTruthy();
     expect(workflow.getBearerToken()).toBeTruthy();
 
     // Test Create Patient
@@ -176,7 +181,17 @@ test.describe('Healthcare API Workflow - Based on Postman Collection', () => {
 
     const patients2 = await workflow.getPatients(0, 10, 'Samuel');
     expect(patients2.data).toBeTruthy();
-
     console.log('✅ Pagination tests passed!');
   });
 });
+
+// In your createPatient method
+const uniqueSuffix = Date.now() + Math.floor(Math.random() * 10000);
+const uniqueEmail = `samuel.peterson+${uniqueSuffix}@gmail.com`;
+const uniquePhone = `70586${Math.floor(100000 + Math.random() * 899999)}`;
+const patientData = {
+  // ...other fields...
+  email: uniqueEmail,
+  mobileNumber: uniquePhone,
+  // ...other fields...
+};

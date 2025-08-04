@@ -933,18 +933,9 @@ test.describe.serial('Healthcare Management Workflow - Full End-to-End', () => {
         }
       } // End of booking window dropdown opened block
       
-      // Configure time slots BEFORE setting up weekdays
-      Logger.info('Configuring time slots...');
-      
-      // First, make sure we're on Monday tab
-      await page.getByRole('tab', { name: 'Monday' }).click();
-      await page.waitForTimeout(1000);
-      
-      // Set start time with more specific selector
-      Logger.info('Setting start time...');
-      
-        let startTimeSet = false;
-      // Try multiple selectors for start time dropdown to avoid strict mode violation
+      // Configure time slots for all weekdays (Monday to Friday)
+      const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      // Define selectors for time dropdowns (ensure available in this scope)
       const startTimeSelectors = [
         'form div:has-text("Start Time") [aria-label="Open"]:first-of-type',
         'form div:has-text("Start Time") button:first-of-type',
@@ -952,249 +943,110 @@ test.describe.serial('Healthcare Management Workflow - Full End-to-End', () => {
         'form div:has-text("Start Time") [title="Open"]:first-of-type',
         '[data-testid*="start"] [aria-label="Open"]'
       ];
-      
-      let startDropdownOpened = false;
-      for (const selector of startTimeSelectors) {
-        try {
-          Logger.info(`🎯 Trying start time selector: ${selector}`);
-          const element = page.locator(selector);
-          const count = await element.count();
-          Logger.info(`   📊 Found ${count} elements`);
-          
-          if (count === 1) {
-            await element.click();
-            await page.waitForTimeout(1500);
-            
-            // Check if options appeared
-            const optionCount = await page.locator('[role="option"]').count();
-            if (optionCount > 0) {
-              Logger.info(`✅ Opened start time dropdown with ${optionCount} options`);
-              startDropdownOpened = true;
-              break;
-            }
-          }
-        } catch (error) {
-          Logger.info(`   ❌ Start time selector failed: ${error.message}`);
-          continue;
-        }
-      }
-      
-      if (startDropdownOpened) {
-        // Try to select 9:00 AM or similar
-        const startTimeOptions = [
-          '09:00 AM', '9:00 AM', '09:00', '9:00', 
-          '08:00 AM', '8:00 AM', '10:00 AM', '07:00 AM'
-        ];
-        
-        for (const startTime of startTimeOptions) {
-          try {
-            await page.getByRole('option', { name: startTime }).click();
-            Logger.info(`✅ Set start time: ${startTime}`);
-            startTimeSet = true;
-            break;
-          } catch {
-            continue;
-          }
-        }
-        
-        if (!startTimeSet) {
-          // Select first available start time
-          const allStartOptions = await page.locator('[role="option"]').allTextContents();
-          Logger.info(`Available start times: ${allStartOptions.slice(0, 5).join(', ')}`);
-          await page.getByRole('option').first().click();
-          Logger.info('✅ Set fallback start time');
-          startTimeSet = true;
-        }
-      } else {
-        Logger.info('⚠️ Could not open start time dropdown, using default');
-      }
-      
-      await page.waitForTimeout(1000);
-      
-      // Set end time with more specific selector
-      Logger.info('Setting end time...');
-      
-        let endTimeSet = false;
-      // Try multiple selectors for end time dropdown to avoid strict mode violation
       const endTimeSelectors = [
         'form div:has-text("End Time") [aria-label="Open"]:first-of-type',
-        'form div:has-text("End Time") button:first-of-type', 
+        'form div:has-text("End Time") button:first-of-type',
         'form .MuiFormControl-root:has-text("End Time") [role="button"]',
         'form div:has-text("End Time") [title="Open"]:first-of-type',
         '[data-testid*="end"] [aria-label="Open"]'
       ];
-      
-      let endDropdownOpened = false;
-      for (const selector of endTimeSelectors) {
-        try {
-          Logger.info(`🎯 Trying end time selector: ${selector}`);
-          const element = page.locator(selector);
-          const count = await element.count();
-          Logger.info(`   📊 Found ${count} elements`);
-          
-          if (count === 1) {
-            await element.click();
-            await page.waitForTimeout(1500);
-            
-            // Check if options appeared
-            const optionCount = await page.locator('[role="option"]').count();
-            if (optionCount > 0) {
-              Logger.info(`✅ Opened end time dropdown with ${optionCount} options`);
-              endDropdownOpened = true;
-              break;
-            }
-          }
-        } catch (error) {
-          Logger.info(`   ❌ End time selector failed: ${error.message}`);
-          continue;
-        }
-      }
-      
-      if (endDropdownOpened) {
-        // Get all available end time options first
-        const allEndOptions = await page.locator('[role="option"]').allTextContents();
-        Logger.info(`📋 Available end time options: ${allEndOptions.join(' | ')}`);
-        
-        // Try to select duration-based end times (from screenshot: they show durations like "1 hr", "30 mins")
-        const durationBasedOptions = [
-          // Look for 8+ hour durations (full work day)
-          '5:00 PM (8 hrs)', '17:00 (8 hrs)', '8 hrs', '8hr',
-          // Look for 7+ hour durations  
-          '4:00 PM (7 hrs)', '16:00 (7 hrs)', '7 hrs', '7hr',
-          // Look for 6+ hour durations
-          '3:00 PM (6 hrs)', '15:00 (6 hrs)', '6 hrs', '6hr',
-          // Look for any afternoon times
-          'PM', '1 hr', '2 hr', '3 hr', '4 hr', '5 hr', '6 hr', '7 hr', '8 hr'
-        ];
-        
-        for (const pattern of durationBasedOptions) {
+      for (const day of weekdays) {
+        Logger.info(`Configuring availability for ${day}...`);
+        await page.getByRole('tab', { name: day }).click();
+        await page.waitForTimeout(500);
+        // Set start time to earliest (e.g., 07:00 AM)
+        let startDropdownOpened = false;
+        for (const selector of startTimeSelectors) {
           try {
-            // Find option that contains this pattern
-            const matchingOptions = allEndOptions.filter(option => 
-              option.toLowerCase().includes(pattern.toLowerCase())
-            );
-            
-            if (matchingOptions.length > 0) {
-              Logger.info(`🎯 Found matching end time pattern "${pattern}": ${matchingOptions[0]}`);
-              await page.getByRole('option', { name: matchingOptions[0] }).click();
-              Logger.success(`✅ Set end time: ${matchingOptions[0]}`);
-            endTimeSet = true;
-            break;
+            const element = page.locator(selector);
+            const count = await element.count();
+            if (count === 1) {
+              await element.click();
+              await page.waitForTimeout(1500);
+              const optionCount = await page.locator('[role="option"]').count();
+              if (optionCount > 0) {
+                startDropdownOpened = true;
+                break;
+              }
             }
           } catch (error) {
-            Logger.info(`❌ Failed to select pattern "${pattern}": ${error.message}`);
             continue;
           }
         }
-        
-        // If pattern matching failed, try to select a reasonable duration
-        if (!endTimeSet) {
-          Logger.info('🔄 Pattern matching failed, trying duration selection...');
-          
-          for (let i = 0; i < allEndOptions.length; i++) {
-            const option = allEndOptions[i];
-            Logger.info(`   🔍 Checking option ${i}: "${option}"`);
-            
-            // Look for options with reasonable durations (avoid very short durations)
-            const hasLongDuration = option.includes('hr') || 
-                                  option.includes('hours') ||
-                                  option.includes('PM') ||
-                                  (option.includes('mins') && 
-                                   (option.includes('30') || option.includes('45') || option.includes('60')));
-            
-            if (hasLongDuration) {
-              try {
-                await page.getByRole('option', { name: option }).click();
-                Logger.success(`✅ Selected end time by duration logic: "${option}"`);
-                endTimeSet = true;
-                break;
-              } catch (error) {
-                Logger.info(`   ❌ Failed to click "${option}": ${error.message}`);
-                continue;
-              }
+        if (startDropdownOpened) {
+          const earliestStartTime = ['07:00 AM', '7:00 AM', '07:00', '7:00'];
+          let startTimeSet = false;
+          for (const startTime of earliestStartTime) {
+            try {
+              await page.getByRole('option', { name: startTime }).click();
+              Logger.info(`✅ Set start time: ${startTime}`);
+              startTimeSet = true;
+              break;
+            } catch {
+              continue;
             }
           }
-        }
-        
-        // Last resort - select the last option (usually longest duration)
-        if (!endTimeSet) {
-          Logger.info('⚠️ All smart selection failed, selecting last option (longest duration)...');
-          try {
-            const lastOption = allEndOptions[allEndOptions.length - 1];
-            await page.getByRole('option').last().click();
-            Logger.success(`✅ Selected fallback end time: "${lastOption}"`);
-            endTimeSet = true;
-          } catch (error) {
-            Logger.error(`❌ Even fallback selection failed: ${error.message}`);
+          if (!startTimeSet) {
+            await page.getByRole('option').first().click();
+            Logger.info('✅ Set fallback start time');
           }
         }
-      } else {
-        Logger.info('⚠️ Could not open end time dropdown, using default');
+        await page.waitForTimeout(1000);
+        // Set end time to latest (e.g., 11:45 PM or last available)
+        let endDropdownOpened = false;
+        for (const selector of endTimeSelectors) {
+          try {
+            const element = page.locator(selector);
+            const count = await element.count();
+            if (count === 1) {
+              await element.click();
+              await page.waitForTimeout(1500);
+              const optionCount = await page.locator('[role="option"]').count();
+              if (optionCount > 0) {
+                endDropdownOpened = true;
+                break;
+              }
+            }
+          } catch (error) {
+            continue;
+          }
         }
-        
-      await page.waitForTimeout(1000);
-      
-      // Enable telehealth for Monday
+        if (endDropdownOpened) {
+          // Try to select the latest time (e.g., 11:45 PM, 11:00 PM, or last option)
+          const latestEndTimes = ['11:45 PM', '11:30 PM', '11:00 PM', '10:45 PM', '10:30 PM', '10:00 PM', '09:45 PM', '09:30 PM', '09:00 PM'];
+          let endTimeSet = false;
+          for (const endTime of latestEndTimes) {
+            try {
+              await page.getByRole('option', { name: endTime }).click();
+              Logger.info(`✅ Set end time: ${endTime}`);
+              endTimeSet = true;
+              break;
+            } catch {
+              continue;
+            }
+          }
+          if (!endTimeSet) {
+            await page.getByRole('option').last().click();
+            Logger.info('✅ Set fallback end time (last available)');
+          }
+        }
+        await page.waitForTimeout(1000);
+        // Enable telehealth
         const telehealthCheckbox = page.getByRole('checkbox', { name: 'Telehealth' });
         if (!(await telehealthCheckbox.isChecked())) {
           await telehealthCheckbox.check();
-        Logger.info('✓ Enabled Telehealth');
-      }
-      
-      // Copy Monday settings to other days (check if each day is enabled first)
-      const allDays = ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-      let configuredDays = ['Monday']; // Monday was already configured
-      
-      for (const day of allDays) {
-        Logger.info(`Checking if ${day} tab is available and enabled...`);
-        
-        try {
-          const dayTab = page.getByRole('tab', { name: day });
-          const tabCount = await dayTab.count();
-          
-          if (tabCount > 0) {
-            // Check if the tab is disabled
-            const isDisabled = await dayTab.getAttribute('disabled');
-            const hasDisabledClass = await dayTab.getAttribute('class');
-            const isTabDisabled = isDisabled !== null || (hasDisabledClass && hasDisabledClass.includes('Mui-disabled'));
-            
-            if (isTabDisabled) {
-              Logger.info(`⚠️ ${day} tab is disabled - skipping (weekends may not be allowed)`);
-              continue;
-            }
-            
-            // Tab is enabled, proceed to configure it
-            Logger.info(`✅ ${day} tab is enabled - configuring...`);
-            await dayTab.click();
-            await page.waitForTimeout(500);
-            
-            // Enable telehealth for this day
-            const dayTelehealthCheckbox = page.getByRole('checkbox', { name: 'Telehealth' });
-            if (!(await dayTelehealthCheckbox.isChecked())) {
-              await dayTelehealthCheckbox.check();
-            }
-            
-            configuredDays.push(day);
-            Logger.info(`✓ Successfully configured ${day} with same availability as Monday`);
-            
-          } else {
-            Logger.info(`⚠️ ${day} tab not found - skipping`);
-          }
-          
-        } catch (error) {
-          Logger.info(`⚠️ Could not configure ${day}: ${error.message} - skipping`);
-          continue;
         }
+        Logger.info(`✓ Enabled Telehealth for ${day}`);
       }
-      
-      Logger.success(`✅ Availability configured for: ${configuredDays.join(', ')}`);
-      Logger.info(`📅 Total days with availability: ${configuredDays.length}/7`);
+      Logger.success(`✅ Availability configured for: ${weekdays.join(', ')}`);
+      Logger.info(`📅 Total days with availability: ${weekdays.length}/7`);
       
       // Set appointment details with validation-compliant settings
       Logger.info('Setting appointment type and duration...');
       
       // Set appointment type - try options that allow flexibility
       let appointmentTypeSet = false;
+      let appointmentTypeSetInAvailability: string | undefined; // <-- Declare the variable
       const appointmentTypes = [
         'New Patient Visit',      // Usually allows longer durations
         'Consultation',           // General consultation type
@@ -1202,19 +1054,13 @@ test.describe.serial('Healthcare Management Workflow - Full End-to-End', () => {
         'Follow-up Visit'         // Fallback (has 30min restriction)
       ];
       
-      await page.locator('form').filter({ hasText: 'Appointment TypeAppointment' }).getByLabel('Open').click();
-      await page.waitForTimeout(1000);
-      
-      // Log available appointment types
-      const availableAppointmentTypes = await page.locator('[role="option"]').allTextContents();
-      Logger.info(`📋 Available appointment types: ${availableAppointmentTypes.join(' | ')}`);
-      
       for (const appointmentType of appointmentTypes) {
         try {
           const option = page.getByRole('option', { name: appointmentType });
           if (await option.count() > 0) {
             await option.click();
             Logger.info(`✅ Set appointment type: ${appointmentType}`);
+            appointmentTypeSetInAvailability = appointmentType; // <-- Store the type
             appointmentTypeSet = true;
             break;
           }
@@ -1222,12 +1068,6 @@ test.describe.serial('Healthcare Management Workflow - Full End-to-End', () => {
           Logger.info(`❌ Appointment type "${appointmentType}" not available`);
           continue;
         }
-      }
-      
-      if (!appointmentTypeSet) {
-        // Fallback to first available option
-        await page.getByRole('option').first().click();
-        Logger.info('✅ Set fallback appointment type (first available)');
       }
       
       // Set duration - try shorter durations first to avoid validation issues
@@ -1738,9 +1578,9 @@ test.describe.serial('Healthcare Management Workflow - Full End-to-End', () => {
       await page.getByRole('button', { name: 'Telehealth' }).click();
       Logger.info('Selected Telehealth');
       
-      // Enhanced provider selection - use EXACT same provider from availability setup
+      // Enhanced provider selection - use EXACT same provider from availability
       const providerToSearch = testData.provider.selectedInAvailability || testData.provider.fullName;
-      Logger.info(`🎯 Searching for the EXACT provider from availability setup: "${providerToSearch}"`);
+      Logger.info(`🎯 Searching for the EXACT provider from availability: "${providerToSearch}"`);
       Logger.info(`   Original provider details: First="${testData.provider.firstName}", Last="${testData.provider.lastName}"`);
       Logger.info(`   Actually selected in availability: "${testData.provider.selectedInAvailability}"`);
       
@@ -1813,8 +1653,7 @@ test.describe.serial('Healthcare Management Workflow - Full End-to-End', () => {
             if (matchesStoredProvider || hasFirstName || hasLastName) {
               try {
                 await page.getByRole('option', { name: optionText }).click();
-                const matchType = matchesStoredProvider ? 'stored provider' : 'name component';
-                Logger.success(`✅ Selected provider by flexible match (${matchType}): "${optionText}"`);
+                Logger.success(`✅ Selected provider by flexible match (${matchesStoredProvider ? 'stored provider' : 'name component'}): "${optionText}"`);
                 providerSelected = true;
                 break;
               } catch (error) {
@@ -1905,191 +1744,131 @@ test.describe.serial('Healthcare Management Workflow - Full End-to-End', () => {
       Logger.info(`📅 Weekday dates to prioritize: ${weekdayDates.join(', ')}`);
       Logger.info(`📅 All dates to try: ${datesToTry.join(', ')}`);
       Logger.info(`📅 Today is: ${todayDate}, prioritizing future weekdays: ${futureWeekdays.slice(0, 5).join(', ')}`);;
+      // Enhanced: Try dates in current and next months if needed
       let dateSelected = false;
       let selectedDate = '';
+      let selectedMonth = currentMonth;
+      let selectedYear = currentYear;
+      let calendarAdvanceCount = 0;
+      const maxCalendarAdvance = 3; // Try up to 3 months ahead
       
-      for (const dateNum of datesToTry) {
-        Logger.info(`🎯 Trying to select date: ${dateNum}`);
-        
-        // Check browser responsiveness before each date attempt
-        const isResponsive = await checkBrowserResponsiveness(page, `Date ${dateNum} Selection`);
-        if (!isResponsive) {
-          Logger.error(`❌ Browser unresponsive before trying date ${dateNum}`);
-          continue;
-        }
-        
-        try {
-          // Enhanced MUI date picker selectors based on the provided HTML structure
-          const dateSelectors = [
-            // Most specific MUI selectors (matching user's HTML exactly)
-            `button.MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin:has-text("${dateNum}")`,
-            `button.MuiButtonBase-root.MuiPickersDay-root:has-text("${dateNum}")`,
-            `button.MuiPickersDay-root.MuiPickersDay-dayWithMargin:has-text("${dateNum}")`,
-            
-            // Role-based with MUI classes
-            `button[role="gridcell"].MuiPickersDay-root:has-text("${dateNum}")`,
-            `button[role="gridcell"].MuiButtonBase-root:has-text("${dateNum}")`,
-            
-            // Data timestamp approach (from user's HTML)
-            `button[data-timestamp].MuiPickersDay-root:has-text("${dateNum}")`,
-            `button[data-timestamp][role="gridcell"]:has-text("${dateNum}")`,
-            
-            // Aria-colindex approach (from user's HTML)
-            `button[aria-colindex].MuiPickersDay-root:has-text("${dateNum}")`,
-            `button[aria-colindex][role="gridcell"]:has-text("${dateNum}")`,
-            
-            // Broader MUI patterns
-            `.MuiPickersDay-root:has-text("${dateNum}")`,
-            `.MuiPickersDay-dayWithMargin:has-text("${dateNum}")`,
-            
-            // Generic fallbacks 
-            `[role="gridcell"]:has-text("${dateNum}")`,
-            `button:has-text("${dateNum}")`,
-            `button[tabindex="0"]:has-text("${dateNum}")`
-          ];
-          
-                     let dateClicked = false;
-           
-           // First try MUI-specific date selection
-           for (const selector of dateSelectors) {
-             try {
-               const element = page.locator(selector);
-               const count = await element.count();
-               Logger.info(`   📊 Found ${count} elements for date selector: ${selector}`);
-               
-               if (count > 0) {
-                 // For MUI date picker buttons, check if they're selectable (not disabled)
-                 const isDisabled = await element.first().getAttribute('disabled');
-                 const ariaDisabled = await element.first().getAttribute('aria-disabled');
-                 
-                 if (isDisabled === null && ariaDisabled !== 'true') {
-                   // Click the date element
-                   await element.first().click();
-                   Logger.info(`   ✅ Clicked date ${dateNum} using selector: ${selector}`);
-                   selectedDate = dateNum;
-                   dateClicked = true;
-                   break;
-        } else {
-                   Logger.info(`   ⚠️ Date ${dateNum} is disabled, trying next selector`);
-                 }
-        }
-      } catch (error) {
-               Logger.info(`   ❌ Date selector failed: ${selector} - ${error.message}`);
-               continue;
-             }
-           }
-           
-           // If standard selectors failed, try using data-timestamp attribute
-           if (!dateClicked) {
-             Logger.info(`   🔍 Trying timestamp-based selection for date ${dateNum}...`);
-             try {
-               // Look for buttons with data-timestamp that contain the date text
-               const timestampButtons = await page.locator('button[data-timestamp]').all();
-               for (const button of timestampButtons) {
-                 const buttonText = await button.textContent();
-                 if (buttonText && buttonText.trim() === dateNum) {
-                   const isDisabled = await button.getAttribute('disabled');
-                   if (isDisabled === null) {
-                     await button.click();
-                     Logger.info(`   ✅ Clicked date ${dateNum} using timestamp button`);
-                     selectedDate = dateNum;
-                     dateClicked = true;
-                     break;
-                   }
-                 }
-               }
-             } catch (error) {
-               Logger.info(`   ❌ Timestamp-based selection failed: ${error.message}`);
-             }
-           }
-          
-          if (!dateClicked) {
-            Logger.info(`   ⚠️ Could not click date ${dateNum}, trying next date`);
-            continue;
-          }
-          
-          // Wait for slots to load after date selection (shorter timeout to prevent browser hangs)
-          await page.waitForTimeout(2000);
-          
-          // Check if slots are now available
-          Logger.info(`   🔍 Checking for available slots after selecting date ${dateNum}...`);
-          
-          // Try multiple selectors to find time slots (with timeout protection)
-      const slotSelectors = [
-            "div[class*='MuiBox-root']",
-        "button[class*='slot']",
-        "div[class*='time-slot']",
-            "div[class*='available']",
-            "[data-testid*='slot']",
-            "div:has-text('AM')",
-            "div:has-text('PM')",
-            ".appointment-slot",
-            ".time-slot"
-          ];
-          
-          let slotsFound = 0;
-          for (const slotSelector of slotSelectors) {
-            try {
-              // Add timeout protection by waiting for element first, then counting
-              await page.waitForSelector(slotSelector, { timeout: 3000 }).catch(() => {});
-              const slotCount = await page.locator(slotSelector).count();
-              if (slotCount > 0) {
-                Logger.info(`   📊 Found ${slotCount} potential slots using selector: ${slotSelector}`);
-                slotsFound = Math.max(slotsFound, slotCount);
-              }
-            } catch (error) {
-              // Timeout or selector error - continue to next selector
-              continue;
+      while (!dateSelected && calendarAdvanceCount <= maxCalendarAdvance) {
+        // Recompute dates for the current calendar month
+        const monthToTry = (currentMonth + calendarAdvanceCount) % 12;
+        const yearToTry = currentYear + Math.floor((currentMonth + calendarAdvanceCount) / 12);
+        const weekdayDates: string[] = [];
+        const allDates: string[] = [];
+        for (let day = 1; day <= 31; day++) {
+          const testDate = new Date(yearToTry, monthToTry, day);
+          if (testDate.getMonth() === monthToTry) {
+            const dayOfWeek = testDate.getDay();
+            allDates.push(day.toString());
+            if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+              weekdayDates.push(day.toString());
             }
           }
-          
-          // Also check if "No Slots Available" message is gone (with timeout protection)
-          let noSlotsMessage = 0;
-          try {
-            await page.waitForSelector('text=No Slots Available', { timeout: 2000 }).catch(() => {});
-            noSlotsMessage = await page.locator('text=No Slots Available').count();
-          } catch (error) {
-            // If we can't find the "No Slots" message, that's actually good
-            noSlotsMessage = 0;
-          }
-          
-          if (slotsFound > 0 && noSlotsMessage === 0) {
-            Logger.success(`✅ Date ${dateNum} selected successfully with ${slotsFound} slots available!`);
-            dateSelected = true;
-            break;
+        }
+        const todayDate = (calendarAdvanceCount === 0) ? today.getDate() : 1;
+        const futureWeekdays = weekdayDates.filter(day => parseInt(day) >= todayDate);
+        const datesToTry = [...futureWeekdays, ...weekdayDates.filter(day => parseInt(day) < todayDate)];
+        Logger.info(`📅 Trying month: ${monthToTry + 1}/${yearToTry}, dates: ${datesToTry.join(', ')}`);
+        // If not first loop, advance calendar
+        if (calendarAdvanceCount > 0) {
+          Logger.info('➡️ Moving to next month in calendar...');
+          const nextMonthBtn = page.locator('[aria-label="Next month"], button[title="Next month"]');
+          if (await nextMonthBtn.count() > 0) {
+            await nextMonthBtn.first().click();
+            await page.waitForTimeout(1000);
           } else {
-            Logger.info(`   ⚠️ Date ${dateNum} selected but no slots available (${slotsFound} slots found, ${noSlotsMessage} "no slots" messages)`);
-            // Try next date
+            Logger.error('❌ Could not find next month button in calendar');
+            break;
+          }
+        }
+        for (const dateNum of datesToTry) {
+          Logger.info(`🎯 Trying to select date: ${dateNum} in month ${monthToTry + 1}`);
+          try {
+            const dateSelectors = [
+              `button.MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin:has-text("${dateNum}")`,
+              `button.MuiButtonBase-root.MuiPickersDay-root:has-text("${dateNum}")`,
+              `button.MuiPickersDay-root.MuiPickersDay-dayWithMargin:has-text("${dateNum}")`,
+              `button[role="gridcell"].MuiPickersDay-root:has-text("${dateNum}")`,
+              `button[role="gridcell"].MuiButtonBase-root:has-text("${dateNum}")`,
+              `button[data-timestamp].MuiPickersDay-root:has-text("${dateNum}")`,
+              `button[data-timestamp][role="gridcell"]:has-text("${dateNum}")`,
+              `button[aria-colindex].MuiPickersDay-root:has-text("${dateNum}")`,
+              `button[aria-colindex][role="gridcell"]:has-text("${dateNum}")`,
+              `.MuiPickersDay-root:has-text("${dateNum}")`,
+              `.MuiPickersDay-dayWithMargin:has-text("${dateNum}")`,
+              `[role="gridcell"]:has-text("${dateNum}")`,
+              `button:has-text("${dateNum}")`,
+              `button[tabindex="0"]:has-text("${dateNum}")`
+            ];
+            let dateClicked = false;
+            for (const selector of dateSelectors) {
+              try {
+                const element = page.locator(selector);
+                const count = await element.count();
+                if (count > 0) {
+                  const isDisabled = await element.first().getAttribute('disabled');
+                  const ariaDisabled = await element.first().getAttribute('aria-disabled');
+                  if (isDisabled === null && ariaDisabled !== 'true') {
+                    await element.first().click();
+                    selectedDate = dateNum;
+                    dateClicked = true;
+                    break;
+                  }
+                }
+              } catch (error) {
+                continue;
+              }
+            }
+            if (!dateClicked) continue;
+            await page.waitForTimeout(2000);
+            // Check for available slots
+            const slotSelectors = [
+              "div[class*='MuiBox-root']",
+              "button[class*='slot']",
+              "div[class*='time-slot']",
+              "div[class*='available']",
+              "[data-testid*='slot']",
+              "div:has-text('AM')",
+              "div:has-text('PM')",
+              ".appointment-slot",
+              ".time-slot"
+            ];
+            let slotsFound = 0;
+            for (const slotSelector of slotSelectors) {
+              try {
+                await page.waitForSelector(slotSelector, { timeout: 3000 }).catch(() => {});
+                const slotCount = await page.locator(slotSelector).count();
+                if (slotCount > 0) {
+                  slotsFound = Math.max(slotsFound, slotCount);
+                }
+              } catch (error) {
+                continue;
+              }
+            }
+            let noSlotsMessage = 0;
+            try {
+              await page.waitForSelector('text=No Slots Available', { timeout: 2000 }).catch(() => {});
+              noSlotsMessage = await page.locator('text=No Slots Available').count();
+            } catch (error) {
+              noSlotsMessage = 0;
+            }
+            if (slotsFound > 0 && noSlotsMessage === 0) {
+              dateSelected = true;
+              break;
+            }
+          } catch (error) {
             continue;
           }
-          
-        } catch (error) {
-          Logger.info(`❌ Failed to select date ${dateNum}: ${error.message}`);
-          continue;
         }
+        if (dateSelected) break;
+        calendarAdvanceCount++;
       }
-      
       if (!dateSelected) {
-        // Enhanced error handling - check if browser is still responsive
-        try {
-          const isResponsive = await checkBrowserResponsiveness(page, 'Date Selection Error');
-          if (!isResponsive) {
-            Logger.error('❌ Browser is unresponsive during date selection');
-            throw new Error('Browser became unresponsive during date selection');
-          }
-          
-          // Take screenshot for debugging only if browser is responsive
-          await page.screenshot({ path: `no-date-selected-debug-${Date.now()}.png`, fullPage: true });
-          Logger.info('📸 Debug screenshot saved');
-        } catch (screenshotError) {
-          Logger.error(`❌ Could not take debug screenshot: ${screenshotError.message}`);
-          // Check if page is closed
-          if (page.isClosed()) {
-            throw new Error('Browser page was closed during date selection');
-          }
-        }
-        
-        throw new Error(`Could not select any date with available slots. Tried dates: ${datesToTry.join(', ')}`);
+        Logger.error('❌ Could not find any available slot in current or next months.');
+        throw new Error('No available slots found in any month.');
       }
       
       // Step 9: Enhanced slot selection
@@ -2198,9 +1977,16 @@ test.describe.serial('Healthcare Management Workflow - Full End-to-End', () => {
       
       // Step 10: Save appointment
       await page.waitForTimeout(1000);
-      await page.getByRole('button', { name: 'Save And Close' }).click();
-      Logger.info('Saved appointment');
-      
+      const saveAndCloseBtn = page.getByRole('button', { name: 'Save And Close' });
+      const saveBtnCount = await saveAndCloseBtn.count();
+      if (saveBtnCount > 0 && await saveAndCloseBtn.isEnabled()) {
+        await saveAndCloseBtn.click();
+        Logger.info('Saved appointment');
+      } else {
+        Logger.error('❌ "Save And Close" button not found or not enabled. Likely no slot was selected or UI is in an unexpected state.');
+        await page.screenshot({ path: `no-save-and-close-btn-${Date.now()}.png`, fullPage: true });
+        throw new Error('Save And Close button not found or not enabled. Check screenshot for UI state.');
+      }
       // Wait for confirmation
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(2000);

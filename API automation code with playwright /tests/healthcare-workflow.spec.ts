@@ -27,6 +27,8 @@ test.describe('Healthcare API Workflow', () => {
     };
 
     const loginResponse = await apiClient.login(loginCredentials);
+    console.log('Login Response:', loginResponse);
+    console.log('Bearer Token:', apiClient.getBearerToken());
     expect(loginResponse.code).toBe('ENTITY');
     expect(apiClient.getBearerToken()).toBeTruthy();
 
@@ -36,7 +38,7 @@ test.describe('Healthcare API Workflow', () => {
       lastName: 'Peterson',
       gender: 'MALE',
       birthDate: '1994-08-16',
-      email: 'samuel.peterson@example.com',
+      email: `samuel.peterson+${Math.floor(Math.random() * 1000000)}@gmail.com`, // Changed domain and made more random
       phone: '+1234567890'
     };
 

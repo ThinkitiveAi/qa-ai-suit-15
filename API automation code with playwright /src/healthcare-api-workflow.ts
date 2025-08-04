@@ -17,7 +17,7 @@ export interface LoginResponse {
   success: boolean;
   message: string;
   data: {
-    accessToken: string;
+    access_token: string;
     refreshToken: string;
     user: {
       id: string;
@@ -285,7 +285,7 @@ export class HealthcareApiWorkflow {
   async providerLogin(username: string, password: string): Promise<LoginResponse> {
     console.log('🔐 Step 1: Provider Login...');
     
-    const credentials: LoginCredentials = {
+    const credentials = {
       username,
       password,
       xTENANTID: this.tenantId
@@ -301,8 +301,9 @@ export class HealthcareApiWorkflow {
     console.log(`✅ Login Response Status: ${response.status()}`);
     console.log('Response Body:', JSON.stringify(responseBody, null, 2));
 
-    if (response.status() === 200 && responseBody.data?.accessToken) {
-      this.bearerToken = responseBody.data.accessToken;
+    // FIX: Use access_token (underscore), not accessToken (camelCase)
+    if (response.status() === 200 && responseBody.data?.access_token) {
+      this.bearerToken = responseBody.data.access_token;
       console.log('🔑 Bearer token captured successfully');
     }
     
@@ -314,8 +315,14 @@ export class HealthcareApiWorkflow {
    */
   async createPatient(): Promise<ApiResponse> {
     console.log('👤 Step 2: Creating Patient - Samuel Peterson...');
-    
-    const patientData: CreatePatientRequest = {
+
+    // Generate unique email and phone for each run
+    const uniqueSuffix = Date.now() + Math.floor(Math.random() * 10000);
+    const uniqueEmail = `samuel.peterson+${uniqueSuffix}@gmail.com`;
+    const uniquePhone = `70586${Math.floor(100000 + Math.random() * 899999)}`;
+
+    // Add email at the root level
+    const patientData: any = {
       phoneNotAvailable: false,
       emailNotAvailable: false,
       registrationDate: "2025-07-25",
@@ -326,10 +333,10 @@ export class HealthcareApiWorkflow {
       birthDate: "1994-08-16",
       gender: "MALE",
       ssn: "123-45-6789",
-      mrn: "MRN123456",
+      mrn: `MRN${uniqueSuffix}`,
       languages: ["English"],
       avatar: "https://randomuser.me/api/portraits/men/1.jpg",
-      mobileNumber: "7058659504",
+      mobileNumber: uniquePhone,
       faxNumber: "020-12345678",
       homePhone: "020-87654321",
       address: {
@@ -369,7 +376,7 @@ export class HealthcareApiWorkflow {
           subscriberLastName: "Peterson",
           subscriberMiddleName: "A.",
           subscriberSsn: "123-45-6789",
-          subscriberMobileNumber: "7058659504",
+          subscriberMobileNumber: uniquePhone,
           subscriberAddress: {
             line1: "123 Main St",
             line2: "Apt 4B",
@@ -405,7 +412,8 @@ export class HealthcareApiWorkflow {
         {
           signedDate: new Date().toISOString()
         }
-      ]
+      ],
+      email: uniqueEmail // Add email here
     };
 
     const response = await this.request.post(`${this.baseURL}/patient`, {
