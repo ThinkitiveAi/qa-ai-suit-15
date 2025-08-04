@@ -1,28 +1,33 @@
-name: Run Clinician Management Flow
+name: Clinician Management Flow
 
 on:
   push:
-    branches: [ Sainath_Gaikwad ]
+    branches: [main, Sainath_Gaikwad]
   pull_request:
-    branches: [ Sainath_Gaikwad ]
+    branches: [main, Sainath_Gaikwad]
 
 jobs:
-  run-clinician-management-flow:
+  test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
+
       - name: Install dependencies
         run: npm install
-      - name: Run Playwright tests (Clinician Management Flow)
+
+      - name: Run Playwright tests
         run: npx playwright test tests/clinician-management.spec.js
+
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: playwright-report
           path: playwright-report/
