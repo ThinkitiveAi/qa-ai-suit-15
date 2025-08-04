@@ -1,0 +1,611 @@
+<testsuites id="" name="" tests="5" failures="1" skipped="1" errors="0" time="904.5935209999999">
+<testsuite name="healthcare-workflow-legacy.spec.ts" timestamp="2025-07-31T13:11:22.480Z" hostname="chromium" tests="5" failures="1" skipped="1" time="895.857" errors="0">
+<testcase name="Healthcare Management Workflow - Full End-to-End › 01. Provider Creation - PREREQUISITE" classname="healthcare-workflow-legacy.spec.ts" time="79.175">
+<system-out>
+<![CDATA[[INFO] 🔄 Preparing for next test...
+[INFO] ============================================================
+[INFO] Starting Test 1: Provider Creation (PREREQUISITE)
+[INFO] ============================================================
+[INFO] 📋 CURRENT TEST DATA:
+[INFO]    Test Run ID: 1753967483223
+[INFO]    Provider: Dr. Sainath Brown
+[INFO]    Provider Email: 
+[INFO]    Provider NPI: 1234583223
+[INFO]    Patient: Matthew Jones
+[INFO]    Patient Email: 
+[INFO]    Patient Phone: 5557483223
+[INFO] Selecting specialities...
+[INFO] Selected first available speciality
+[INFO] Provider DOB: 05-20-1985
+[INFO] Waiting for provider save confirmation...
+[INFO] ✓ Page loaded after save
+[INFO] Waiting 15 seconds for provider to sync to backend...
+[INFO] 🔍 Checking browser responsiveness for Provider Creation...
+[INFO] ✅ Browser is responsive for Provider Creation
+[SUCCESS] ✅ Provider created successfully: Dr. Sainath Brown
+[INFO] 📧 Provider Email: provider.1753967483223.60.1753967505949@example.com
+[INFO] 🆔 Provider NPI: 1234583223
+[INFO] ============================================================
+[INFO] 🔄 Preparing for next test...
+[INFO] ============================================================
+[INFO] Starting Test 1: Provider Creation (PREREQUISITE)
+[INFO] ============================================================
+[INFO] 📋 CURRENT TEST DATA:
+[INFO]    Test Run ID: 1753967940855
+[INFO]    Provider: Dr. Hero Clark
+[INFO]    Provider Email: 
+[INFO]    Provider NPI: 1234540855
+[INFO]    Patient: William Thompson
+[INFO]    Patient Email: 
+[INFO]    Patient Phone: 5557940855
+[INFO] Selecting specialities...
+[INFO] Selected first available speciality
+[INFO] Provider DOB: 05-24-1989
+[INFO] Waiting for provider save confirmation...
+[INFO] ✓ Page loaded after save
+[INFO] Waiting 15 seconds for provider to sync to backend...
+[INFO] 🔍 Checking browser responsiveness for Provider Creation...
+[INFO] ✅ Browser is responsive for Provider Creation
+[SUCCESS] ✅ Provider created successfully: Dr. Hero Clark
+[INFO] 📧 Provider Email: provider.1753967940855.558.1753967963327@example.com
+[INFO] 🆔 Provider NPI: 1234540855
+[INFO] ============================================================
+]]>
+</system-out>
+</testcase>
+<testcase name="Healthcare Management Workflow - Full End-to-End › 02. Patient Registration - REQUIRES: Provider Created" classname="healthcare-workflow-legacy.spec.ts" time="39.192">
+<system-out>
+<![CDATA[[INFO] 🔄 Preparing for next test...
+[INFO] ============================================================
+[INFO] Starting Test 2: Patient Registration
+[INFO] ============================================================
+[INFO] 📋 CURRENT TEST DATA:
+[INFO]    Test Run ID: 1753967483223
+[INFO]    Provider: Dr. Sainath Brown
+[INFO]    Provider Email: provider.1753967483223.60.1753967505949@example.com
+[INFO]    Provider NPI: 1234583223
+[INFO]    Patient: Matthew Jones
+[INFO]    Patient Email: 
+[INFO]    Patient Phone: 5557483223
+[DEPENDENCY] ✓ Provider dependency satisfied
+[INFO] 🔍 Checking browser responsiveness for Patient Registration Start...
+[INFO] ✅ Browser is responsive for Patient Registration Start
+[INFO] Starting login for patient registration...
+[INFO] Starting login process
+[INFO] Login completed
+[INFO] Waiting for dashboard to load...
+[INFO] ✓ Dashboard loaded successfully
+[INFO] Clicked Create
+[INFO] Selected New Patient
+[INFO] Selected Enter Patient Details
+[INFO] Proceeded to patient details form
+[INFO] Patient DOB: 03-25-1995
+[INFO] Filled patient details
+[INFO] Clicked Save
+[INFO] Verified patient creation success message
+[SUCCESS] Patient registered successfully: Matthew Jones
+[INFO] Patient Email: patient.1753967483223.367.1753967539663@example.com
+[INFO] ============================================================
+[INFO] 🔄 Preparing for next test...
+[INFO] ============================================================
+[INFO] Starting Test 2: Patient Registration
+[INFO] ============================================================
+[INFO] 📋 CURRENT TEST DATA:
+[INFO]    Test Run ID: 1753967940855
+[INFO]    Provider: Dr. Hero Clark
+[INFO]    Provider Email: provider.1753967940855.558.1753967963327@example.com
+[INFO]    Provider NPI: 1234540855
+[INFO]    Patient: William Thompson
+[INFO]    Patient Email: 
+[INFO]    Patient Phone: 5557940855
+[DEPENDENCY] ✓ Provider dependency satisfied
+[INFO] 🔍 Checking browser responsiveness for Patient Registration Start...
+[INFO] ✅ Browser is responsive for Patient Registration Start
+[INFO] Starting login for patient registration...
+[INFO] Starting login process
+[INFO] Login completed
+[INFO] Waiting for dashboard to load...
+[INFO] ✓ Dashboard loaded successfully
+[INFO] Clicked Create
+[INFO] Selected New Patient
+[INFO] Selected Enter Patient Details
+[INFO] Proceeded to patient details form
+[INFO] Patient DOB: 03-29-1994
+[INFO] Filled patient details
+[INFO] Clicked Save
+[INFO] Verified patient creation success message
+[SUCCESS] Patient registered successfully: William Thompson
+[INFO] Patient Email: patient.1753967940855.119.1753967996287@example.com
+[INFO] ============================================================
+]]>
+</system-out>
+</testcase>
+<testcase name="Healthcare Management Workflow - Full End-to-End › 03. Set Provider Availability - REQUIRES: Provider AND Patient Created" classname="healthcare-workflow-legacy.spec.ts" time="182.081">
+<system-out>
+<![CDATA[[INFO] 🔄 Preparing for next test...
+[INFO] ============================================================
+[INFO] Starting Test 3: Set Provider Availability
+[INFO] ============================================================
+[INFO] 📋 CURRENT TEST DATA:
+[INFO]    Test Run ID: 1753967483223
+[INFO]    Provider: Dr. Sainath Brown
+[INFO]    Provider Email: provider.1753967483223.60.1753967505949@example.com
+[INFO]    Provider NPI: 1234583223
+[INFO]    Patient: Matthew Jones
+[INFO]    Patient Email: patient.1753967483223.367.1753967539663@example.com
+[INFO]    Patient Phone: 5557483223
+[DEPENDENCY] ✓ Provider dependency satisfied
+[DEPENDENCY] ✓ Patient dependency satisfied
+[INFO] 🔍 Checking browser responsiveness for Availability Setup Start...
+[INFO] ✅ Browser is responsive for Availability Setup Start
+[INFO] Reloading page and re-logging in before availability step...
+[INFO] Starting login process
+[INFO] Login completed
+[INFO] 🎯 Looking for the EXACT provider created: Dr. Sainath Brown
+[INFO]    Provider details: First="Dr. Sainath", Last="Brown"
+[INFO] 🎯 Provider dropdown attempt 1: div:has-text("Select Provider") [aria-label="Open"]
+[INFO]    📊 Found 12 elements
+[INFO] 🎯 Provider dropdown attempt 2: div:has-text("Select Provider") button
+[INFO]    📊 Found 33 elements
+[INFO] 🎯 Provider dropdown attempt 3: div:has-text("Select Provider") [role="button"]
+[INFO]    📊 Found 0 elements
+[INFO] 🎯 Provider dropdown attempt 4: form .MuiFormControl-root:has-text("Select Provider") [aria-label="Open"]
+[INFO]    📊 Found 1 elements
+[INFO]    📋 Found 20 options after clicking
+[SUCCESS] ✅ Opened provider dropdown using: form .MuiFormControl-root:has-text("Select Provider") [aria-label="Open"]
+[INFO] 📋 ALL available providers: AliceD AliceTestP | AliceO AliceTestI | AliceU AliceTestC | BobF BobTestU | BobI BobTestN | BobL BobTestA | CarolC CarolTestD | DavidC DavidTestL | DavidE DavidTestV | DavidR DavidTestU | DavidV DavidTestX | Dr. Gargi Davis | Dr. Rutuja Anderson | Dr. Sainath Brown | Dr. Sainath Martin | Dr. Shekhawat Clark | Dr. Shubham Brown | Steven Miller | Stevenn Millerrr | teste teste
+[INFO] 🎯 Trying selection method: exact_full_name
+[INFO]    📊 Found 1 matching options
+[INFO]    📝 Option text: "Dr. Sainath Brown"
+[SUCCESS] ✅ Selected provider: "Dr. Sainath Brown" using method: exact_full_name
+[INFO] 🔗 STORED for appointment booking: "Dr. Sainath Brown"
+[INFO] Setting timezone...
+[INFO] ✓ Set timezone: Eastern Standard Time (UTC -5)
+[INFO] Setting booking window...
+[INFO] 🔍 Debugging available elements for booking window...
+[INFO] 📊 Found: 15 forms, 2 "Booking Window" texts, 2 "Select" texts
+[INFO] 🎯 Attempt 1/11: Trying selector: div:has-text("Booking Window") [role="button"]:has-text("Select")
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 2/11: Trying selector: label:has-text("Booking Window") ~ div [role="button"]:has-text("Select")
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 3/11: Trying selector: form .MuiFormControl-root:nth-of-type(3) [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 4/11: Trying selector: form .MuiSelect-root:nth-of-type(3) [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 5/11: Trying selector: [aria-label*="booking" i] [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 6/11: Trying selector: [aria-label*="window" i] [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 7/11: Trying selector: div:has-text("Eastern Standard Time") ~ div [role="button"]:has-text("Select")
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 8/11: Trying selector: div:has-text("Time Zone") ~ div [role="button"]:has-text("Select")
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 9/11: Trying selector: div:has-text("Booking Window") + div [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 10/11: Trying selector: div:has-text("Booking Window") ~ div [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 11/11: Trying selector: .MuiFormControl-root:has-text("Booking Window") [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🔧 Trying JavaScript-based approach...
+[SUCCESS] ✅ Opened booking window dropdown using JavaScript approach
+[INFO] 📋 Available booking window options: Custom, 1 Week, 2 Week, 3 Week, 4 Week, 5 Week, 6 Week, 12 Week, 26 Week, 52 Week
+[INFO] 🎯 Attempting to select: 2 Week
+[INFO]    🔍 Checking selector: [role="option"]:has-text("2 Week") (found 3 elements)
+[SUCCESS] ✅ Successfully selected booking window: 2 Week using selector: [role="option"]:has-text("2 Week")
+[INFO] Configuring availability for Monday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Monday
+[INFO] Configuring availability for Tuesday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Tuesday
+[INFO] Configuring availability for Wednesday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Wednesday
+[INFO] Configuring availability for Thursday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Thursday
+[INFO] Configuring availability for Friday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Friday
+[SUCCESS] ✅ Availability configured for: Monday, Tuesday, Wednesday, Thursday, Friday
+[INFO] 📅 Total days with availability: 5/7
+[INFO] Setting appointment type and duration...
+[INFO] Setting appointment duration...
+[INFO] 📋 Available durations: 15 minutes | 30 minutes | 45 minutes | 60 minutes | 75 minutes | 90 minutes
+[INFO] ✅ Set duration: 15 minutes
+[INFO] Setting schedule notice...
+[INFO] 📋 Available schedule notices: 1 Hours Away | 4 Hours Away | 8 Hours Away | 12 Hours Away | 1 Week Away | 1 Month Away | 1 Day Away | 3 Day Away
+[INFO] ✅ Set schedule notice: 1 Hours Away
+[INFO] Attempting to save availability...
+[INFO] Clicked Save button
+[INFO] 🔍 Checking if availability save was successful...
+[INFO] 📍 Current URL: https://stage_aithinkitive.uat.provider.ecarehealth.com/app/provider/scheduling/availability
+[SUCCESS] ✅ Navigated away from availability page - save likely successful
+[SUCCESS] ✅ Availability save completed successfully
+[SUCCESS] Provider availability configuration completed
+[INFO] ============================================================
+[INFO] 🔄 Still on availability page, attempting final navigation...
+[INFO] ✅ Final navigation completed
+[INFO] 🔄 Preparing for next test...
+[INFO] ============================================================
+[INFO] Starting Test 3: Set Provider Availability
+[INFO] ============================================================
+[INFO] 📋 CURRENT TEST DATA:
+[INFO]    Test Run ID: 1753967940855
+[INFO]    Provider: Dr. Hero Clark
+[INFO]    Provider Email: provider.1753967940855.558.1753967963327@example.com
+[INFO]    Provider NPI: 1234540855
+[INFO]    Patient: William Thompson
+[INFO]    Patient Email: patient.1753967940855.119.1753967996287@example.com
+[INFO]    Patient Phone: 5557940855
+[DEPENDENCY] ✓ Provider dependency satisfied
+[DEPENDENCY] ✓ Patient dependency satisfied
+[INFO] 🔍 Checking browser responsiveness for Availability Setup Start...
+[INFO] ✅ Browser is responsive for Availability Setup Start
+[INFO] Reloading page and re-logging in before availability step...
+[INFO] Starting login process
+[INFO] Login completed
+[INFO] 🎯 Looking for the EXACT provider created: Dr. Hero Clark
+[INFO]    Provider details: First="Dr. Hero", Last="Clark"
+[INFO] 🎯 Provider dropdown attempt 1: div:has-text("Select Provider") [aria-label="Open"]
+[INFO]    📊 Found 12 elements
+[INFO] 🎯 Provider dropdown attempt 2: div:has-text("Select Provider") button
+[INFO]    📊 Found 33 elements
+[INFO] 🎯 Provider dropdown attempt 3: div:has-text("Select Provider") [role="button"]
+[INFO]    📊 Found 0 elements
+[INFO] 🎯 Provider dropdown attempt 4: form .MuiFormControl-root:has-text("Select Provider") [aria-label="Open"]
+[INFO]    📊 Found 1 elements
+[INFO]    📋 Found 20 options after clicking
+[SUCCESS] ✅ Opened provider dropdown using: form .MuiFormControl-root:has-text("Select Provider") [aria-label="Open"]
+[INFO] 📋 ALL available providers: AliceD AliceTestP | AliceO AliceTestI | AliceU AliceTestC | BobF BobTestU | BobI BobTestN | BobL BobTestA | CarolC CarolTestD | DavidC DavidTestL | DavidE DavidTestV | DavidR DavidTestU | DavidV DavidTestX | Dr. Gargi Davis | Dr. Hero Clark | Dr. Rutuja Anderson | Dr. Sainath Brown | Dr. Sainath Martin | Dr. Shekhawat Clark | Dr. Shubham Brown | Steven Miller | Stevenn Millerrr
+[INFO] 🎯 Trying selection method: exact_full_name
+[INFO]    📊 Found 1 matching options
+[INFO]    📝 Option text: "Dr. Hero Clark"
+[SUCCESS] ✅ Selected provider: "Dr. Hero Clark" using method: exact_full_name
+[INFO] 🔗 STORED for appointment booking: "Dr. Hero Clark"
+[INFO] Setting timezone...
+[INFO] ✓ Set timezone: Eastern Standard Time (UTC -5)
+[INFO] Setting booking window...
+[INFO] 🔍 Debugging available elements for booking window...
+[INFO] 📊 Found: 15 forms, 2 "Booking Window" texts, 2 "Select" texts
+[INFO] 🎯 Attempt 1/11: Trying selector: div:has-text("Booking Window") [role="button"]:has-text("Select")
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 2/11: Trying selector: label:has-text("Booking Window") ~ div [role="button"]:has-text("Select")
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 3/11: Trying selector: form .MuiFormControl-root:nth-of-type(3) [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 4/11: Trying selector: form .MuiSelect-root:nth-of-type(3) [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 5/11: Trying selector: [aria-label*="booking" i] [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 6/11: Trying selector: [aria-label*="window" i] [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 7/11: Trying selector: div:has-text("Eastern Standard Time") ~ div [role="button"]:has-text("Select")
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 8/11: Trying selector: div:has-text("Time Zone") ~ div [role="button"]:has-text("Select")
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 9/11: Trying selector: div:has-text("Booking Window") + div [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 10/11: Trying selector: div:has-text("Booking Window") ~ div [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🎯 Attempt 11/11: Trying selector: .MuiFormControl-root:has-text("Booking Window") [role="button"]
+[INFO]    📊 Found 0 elements with this selector
+[INFO] 🔧 Trying JavaScript-based approach...
+[SUCCESS] ✅ Opened booking window dropdown using JavaScript approach
+[INFO] 📋 Available booking window options: Custom, 1 Week, 2 Week, 3 Week, 4 Week, 5 Week, 6 Week, 12 Week, 26 Week, 52 Week
+[INFO] 🎯 Attempting to select: 2 Week
+[INFO]    🔍 Checking selector: [role="option"]:has-text("2 Week") (found 3 elements)
+[SUCCESS] ✅ Successfully selected booking window: 2 Week using selector: [role="option"]:has-text("2 Week")
+[INFO] Configuring availability for Monday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Monday
+[INFO] Configuring availability for Tuesday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Tuesday
+[INFO] Configuring availability for Wednesday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Wednesday
+[INFO] Configuring availability for Thursday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Thursday
+[INFO] Configuring availability for Friday...
+[INFO] ✅ Set start time: 07:00 AM
+[INFO] ✅ Set end time: 11:45 PM
+[INFO] ✓ Enabled Telehealth for Friday
+[SUCCESS] ✅ Availability configured for: Monday, Tuesday, Wednesday, Thursday, Friday
+[INFO] 📅 Total days with availability: 5/7
+[INFO] Setting appointment type and duration...
+[INFO] Setting appointment duration...
+[INFO] 📋 Available durations: 15 minutes | 30 minutes | 45 minutes | 60 minutes | 75 minutes | 90 minutes
+[INFO] ✅ Set duration: 15 minutes
+[INFO] Setting schedule notice...
+[INFO] 📋 Available schedule notices: 1 Hours Away | 4 Hours Away | 8 Hours Away | 12 Hours Away | 1 Week Away | 1 Month Away | 1 Day Away | 3 Day Away
+[INFO] ✅ Set schedule notice: 1 Hours Away
+[INFO] Attempting to save availability...
+[INFO] Clicked Save button
+[INFO] 🔍 Checking if availability save was successful...
+[INFO] 📍 Current URL: https://stage_aithinkitive.uat.provider.ecarehealth.com/app/provider/scheduling/availability
+[SUCCESS] ✅ Navigated away from availability page - save likely successful
+[SUCCESS] ✅ Availability save completed successfully
+[SUCCESS] Provider availability configuration completed
+[INFO] ============================================================
+[INFO] 🔄 Still on availability page, attempting final navigation...
+[INFO] ✅ Final navigation completed
+]]>
+</system-out>
+</testcase>
+<testcase name="Healthcare Management Workflow - Full End-to-End › 04. Book Appointment - REQUIRES: Provider, Patient, AND Availability" classname="healthcare-workflow-legacy.spec.ts" time="595.409">
+<failure message="healthcare-workflow-legacy.spec.ts:1383:7 04. Book Appointment - REQUIRES: Provider, Patient, AND Availability" type="FAILURE">
+<![CDATA[  [chromium] › healthcare-workflow-legacy.spec.ts:1383:7 › Healthcare Management Workflow - Full End-to-End › 04. Book Appointment - REQUIRES: Provider, Patient, AND Availability 
+
+    Test timeout of 300000ms exceeded.
+
+    Error: locator.count: Target page, context or browser has been closed
+
+      1777 |           Logger.info('➡️ Moving to next month in calendar...');
+      1778 |           const nextMonthBtn = page.locator('[aria-label="Next month"], button[title="Next month"]');
+    > 1779 |           if (await nextMonthBtn.count() > 0) {
+           |                                  ^
+      1780 |             await nextMonthBtn.first().click();
+      1781 |             await page.waitForTimeout(1000);
+      1782 |           } else {
+        at /Users/ttpl-mac-013/Desktop/24th_JULY_SESSION/qa-ai-suit-15/UI automation code with playwright /tests/healthcare-workflow-legacy.spec.ts:1779:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: locator.click: Timeout 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Save And Close' })
+
+
+      1978 |       // Step 10: Save appointment
+      1979 |       await page.waitForTimeout(1000);
+    > 1980 |       await page.getByRole('button', { name: 'Save And Close' }).click();
+           |                                                                  ^
+      1981 |       Logger.info('Saved appointment');
+      1982 |       
+      1983 |       // Wait for confirmation
+        at /Users/ttpl-mac-013/Desktop/24th_JULY_SESSION/qa-ai-suit-15/UI automation code with playwright /tests/healthcare-workflow-legacy.spec.ts:1980:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[[INFO] 🔄 Preparing for next test...
+[INFO] ============================================================
+[INFO] Starting Test 4: Book Appointment
+[INFO] ============================================================
+[INFO] 📋 CURRENT TEST DATA:
+[INFO]    Test Run ID: 1753967483223
+[INFO]    Provider: Dr. Sainath Brown
+[INFO]    Provider Email: provider.1753967483223.60.1753967505949@example.com
+[INFO]    Provider NPI: 1234583223
+[INFO]    Patient: Matthew Jones
+[INFO]    Patient Email: patient.1753967483223.367.1753967539663@example.com
+[INFO]    Patient Phone: 5557483223
+[DEPENDENCY] ✓ Provider dependency satisfied
+[DEPENDENCY] ✓ Patient dependency satisfied
+[DEPENDENCY] ✓ Availability dependency satisfied
+[INFO] 🔍 Checking browser responsiveness for Appointment Booking Start...
+[INFO] ✅ Browser is responsive for Appointment Booking Start
+[INFO] Starting login process
+[INFO] Login completed
+[INFO] Clicked Create
+[INFO] Selected New Appointment
+[INFO] 🎯 Looking for the EXACT patient created: Matthew Jones
+[INFO]    Patient details: First="Matthew", Last="Jones"
+[INFO] 📋 Available patients: Matthew  Jones25 Mar 1995 | Samuelll  Petersonnn17 Aug 1994
+[INFO] 🎯 Trying patient selection method: exact_full_name
+[INFO]    📊 Found 1 matching patients
+[INFO]    📝 Patient option text: "Matthew  Jones25 Mar 1995"
+[SUCCESS] ✅ Selected patient: "Matthew  Jones25 Mar 1995" using method: exact_full_name
+[INFO] Selected appointment type
+[INFO] Filled reason for visit
+[INFO] Selected timezone: Eastern Daylight Time (GMT -04:00)
+[INFO] Selected Telehealth
+[INFO] 🎯 Searching for the EXACT provider from availability: "Dr. Sainath Brown"
+[INFO]    Original provider details: First="Dr. Sainath", Last="Brown"
+[INFO]    Actually selected in availability: "Dr. Sainath Brown"
+[INFO] 📋 Available providers in appointment booking: Dr. Sainath Brown
+[INFO] 🎯 Trying provider selection method: exact_stored_provider
+[INFO]    📊 Found 1 matching providers
+[INFO]    📝 Provider option text: "Dr. Sainath Brown"
+[SUCCESS] ✅ Selected provider: "Dr. Sainath Brown" using method: exact_stored_provider
+[SUCCESS] ✅ Provider selection completed - using same provider as availability setup
+[INFO] Viewing availability
+[INFO] 🗓️ Starting date and slot selection process...
+[INFO] 🔍 Looking for available dates that match provider availability (focusing on weekdays)...
+[INFO] 📅 Weekday dates to prioritize: 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 28, 29, 30, 31
+[INFO] 📅 All dates to try: 31, 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18
+[INFO] 📅 Today is: 31, prioritizing future weekdays: 31
+[INFO] 📅 Trying month: 7/2025, dates: 31, 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 28, 29, 30
+[INFO] 🎯 Trying to select date: 31 in month 7
+[INFO] 🎯 Trying to select date: 1 in month 7
+[INFO] 🎯 Trying to select date: 2 in month 7
+[INFO] 🎯 Trying to select date: 3 in month 7
+[INFO] 🎯 Trying to select date: 4 in month 7
+[INFO] 🎯 Trying to select date: 7 in month 7
+[INFO] 🎯 Trying to select date: 8 in month 7
+[INFO] 🎯 Trying to select date: 9 in month 7
+[INFO] 🎯 Trying to select date: 10 in month 7
+[INFO] 🎯 Trying to select date: 11 in month 7
+[INFO] 🎯 Trying to select date: 14 in month 7
+[INFO] 🎯 Trying to select date: 15 in month 7
+[INFO] 🎯 Trying to select date: 16 in month 7
+[INFO] 🎯 Trying to select date: 17 in month 7
+[INFO] 🎯 Trying to select date: 18 in month 7
+[INFO] 🎯 Trying to select date: 21 in month 7
+[INFO] 🎯 Trying to select date: 22 in month 7
+[INFO] 🎯 Trying to select date: 23 in month 7
+[INFO] 🎯 Trying to select date: 24 in month 7
+[INFO] 🎯 Trying to select date: 25 in month 7
+[INFO] 🎯 Trying to select date: 28 in month 7
+[INFO] 🎯 Trying to select date: 29 in month 7
+[INFO] 🎯 Trying to select date: 30 in month 7
+[INFO] 📅 Trying month: 8/2025, dates: 1, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 25, 26, 27, 28, 29
+[INFO] ➡️ Moving to next month in calendar...
+
+[[ATTACHMENT|../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium/error-context.md]]
+
+[[ATTACHMENT|../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium/trace.zip]]
+[INFO] 🔄 Preparing for next test...
+[INFO] ============================================================
+[INFO] Starting Test 4: Book Appointment
+[INFO] ============================================================
+[INFO] 📋 CURRENT TEST DATA:
+[INFO]    Test Run ID: 1753967940855
+[INFO]    Provider: Dr. Hero Clark
+[INFO]    Provider Email: provider.1753967940855.558.1753967963327@example.com
+[INFO]    Provider NPI: 1234540855
+[INFO]    Patient: William Thompson
+[INFO]    Patient Email: patient.1753967940855.119.1753967996287@example.com
+[INFO]    Patient Phone: 5557940855
+[DEPENDENCY] ✓ Provider dependency satisfied
+[DEPENDENCY] ✓ Patient dependency satisfied
+[DEPENDENCY] ✓ Availability dependency satisfied
+[INFO] 🔍 Checking browser responsiveness for Appointment Booking Start...
+[INFO] ✅ Browser is responsive for Appointment Booking Start
+[INFO] Starting login process
+[INFO] Login completed
+[INFO] Clicked Create
+[INFO] Selected New Appointment
+[INFO] 🎯 Looking for the EXACT patient created: William Thompson
+[INFO]    Patient details: First="William", Last="Thompson"
+[INFO] 📋 Available patients: Samuelll  Petersonnn17 Aug 1994 | William  Thompson29 Mar 1994
+[INFO] 🎯 Trying patient selection method: exact_full_name
+[INFO]    📊 Found 1 matching patients
+[INFO]    📝 Patient option text: "William  Thompson29 Mar 1994"
+[SUCCESS] ✅ Selected patient: "William  Thompson29 Mar 1994" using method: exact_full_name
+[INFO] Selected appointment type
+[INFO] Filled reason for visit
+[INFO] Selected timezone: Eastern Daylight Time (GMT -04:00)
+[INFO] Selected Telehealth
+[INFO] 🎯 Searching for the EXACT provider from availability: "Dr. Hero Clark"
+[INFO]    Original provider details: First="Dr. Hero", Last="Clark"
+[INFO]    Actually selected in availability: "Dr. Hero Clark"
+[INFO] 📋 Available providers in appointment booking: Dr. Hero Clark
+[INFO] 🎯 Trying provider selection method: exact_stored_provider
+[INFO]    📊 Found 1 matching providers
+[INFO]    📝 Provider option text: "Dr. Hero Clark"
+[SUCCESS] ✅ Selected provider: "Dr. Hero Clark" using method: exact_stored_provider
+[SUCCESS] ✅ Provider selection completed - using same provider as availability setup
+[INFO] Viewing availability
+[INFO] 🗓️ Starting date and slot selection process...
+[INFO] 🔍 Looking for available dates that match provider availability (focusing on weekdays)...
+[INFO] 📅 Weekday dates to prioritize: 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 28, 29, 30, 31
+[INFO] 📅 All dates to try: 31, 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18
+[INFO] 📅 Today is: 31, prioritizing future weekdays: 31
+[INFO] 📅 Trying month: 7/2025, dates: 31, 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 28, 29, 30
+[INFO] 🎯 Trying to select date: 31 in month 7
+[INFO] 🎯 Trying to select date: 1 in month 7
+[INFO] 🎯 Selecting time slot for date 1...
+[INFO] 🔍 Checking browser responsiveness for Slot Selection...
+[INFO] ✅ Browser is responsive for Slot Selection
+[INFO] 🔍 Checking slot selector "button.MuiButtonBase-root:not([disabled]):has-text('AM')": found 0 slots
+[INFO] 🔍 Checking slot selector "button.MuiButtonBase-root:not([disabled]):has-text('PM')": found 0 slots
+[INFO] 🔍 Checking slot selector "button.MuiButton-root:not([disabled])": found 6 slots
+[INFO]    📋 Available slots: Clear | Clear | Clear | Clear | Today
+[INFO] ❌ Slot selector "button.MuiButton-root:not([disabled])" failed: locator.click: Timeout 60000ms exceeded.
+Call log:
+[2m  - waiting for locator('button.MuiButton-root:not([disabled])').first()[22m
+[2m    - locator resolved to <button tabindex="0" type="button" class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-ixyu78">…</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    112 × waiting for element to be visible, enabled and stable[22m
+[2m        - element is not visible[22m
+[2m      - retrying click action[22m
+[2m        - waiting 500ms[22m
+
+[INFO] 🔍 Checking slot selector "div[class*='MuiBox-root']:not(:has-text('No Slots')):has-text('AM')": found 15 slots
+[INFO]    📋 Available slots: DashboardSchedulingPatientsCommunicationsCollaborationBillingReportsLibrarySettingsCreate​FiltersJune 2025SMTWTFS123456789101112131415161718192021222324252627282930Search By Patient​Search By Provider​LocationsAllNewYork clinicClearStatusAllScheduledChecked InIn ExamSigned OffConfirmedNo ShowCancelledClearAppointment TypeAllInstantAdministrativeCare CoordinationFollow-Up VisitMedication BriefNew Patient VisitNursing OnlyTelephone CallUrgent VisitVideo VisitWellness ExamClearModeAllTelehealthIn OfficeClearTodayJune 29 – July 05​Schedule Appointment29 Sun30 Mon01 Tue02 Wed03 Thu04 Fri05 Sat12:00 AM12:15 AM12:30 AM12:45 AM1:00 AM1:15 AM1:30 AM1:45 AM2:00 AM2:15 AM2:30 AM2:45 AM3:00 AM3:15 AM3:30 AM3:45 AM4:00 AM4:15 AM4:30 AM4:45 AM5:00 AM5:15 AM5:30 AM5:45 AM6:00 AM6:15 AM6:30 AM6:45 AM7:00 AM7:15 AM7:30 AM7:45 AM8:00 AM8:15 AM8:30 AM8:45 AM9:00 AM9:15 AM9:30 AM9:45 AM10:00 AM10:15 AM10:30 AM10:45 AM11:00 AM11:15 AM11:30 AM11:45 AM12:00 PM12:15 PM12:30 PM12:45 PM1:00 PM1:15 PM1:30 PM1:45 PM2:00 PM2:15 PM2:30 PM2:45 PM3:00 PM3:15 PM3:30 PM3:45 PM4:00 PM4:15 PM4:30 PM4:45 PM5:00 PM5:15 PM5:30 PM5:45 PM6:00 PM6:15 PM6:30 PM6:45 PM7:00 PM7:15 PM7:30 PM7:45 PM8:00 PM8:15 PM8:30 PM8:45 PM9:00 PM9:15 PM9:30 PM9:45 PM10:00 PM10:15 PM10:30 PM10:45 PM11:00 PM11:15 PM11:30 PM11:45 PMTimeVisit TypePatient NameAppointment TypeProviderReason For VisitLocationForm StatusInsurance EligibilityActionNo Records Available Current page: 1Rows per page:250–0 of 0 | FiltersJune 2025SMTWTFS123456789101112131415161718192021222324252627282930Search By Patient​Search By Provider​LocationsAllNewYork clinicClearStatusAllScheduledChecked InIn ExamSigned OffConfirmedNo ShowCancelledClearAppointment TypeAllInstantAdministrativeCare CoordinationFollow-Up VisitMedication BriefNew Patient VisitNursing OnlyTelephone CallUrgent VisitVideo VisitWellness ExamClearModeAllTelehealthIn OfficeClearTodayJune 29 – July 05​Schedule Appointment29 Sun30 Mon01 Tue02 Wed03 Thu04 Fri05 Sat12:00 AM12:15 AM12:30 AM12:45 AM1:00 AM1:15 AM1:30 AM1:45 AM2:00 AM2:15 AM2:30 AM2:45 AM3:00 AM3:15 AM3:30 AM3:45 AM4:00 AM4:15 AM4:30 AM4:45 AM5:00 AM5:15 AM5:30 AM5:45 AM6:00 AM6:15 AM6:30 AM6:45 AM7:00 AM7:15 AM7:30 AM7:45 AM8:00 AM8:15 AM8:30 AM8:45 AM9:00 AM9:15 AM9:30 AM9:45 AM10:00 AM10:15 AM10:30 AM10:45 AM11:00 AM11:15 AM11:30 AM11:45 AM12:00 PM12:15 PM12:30 PM12:45 PM1:00 PM1:15 PM1:30 PM1:45 PM2:00 PM2:15 PM2:30 PM2:45 PM3:00 PM3:15 PM3:30 PM3:45 PM4:00 PM4:15 PM4:30 PM4:45 PM5:00 PM5:15 PM5:30 PM5:45 PM6:00 PM6:15 PM6:30 PM6:45 PM7:00 PM7:15 PM7:30 PM7:45 PM8:00 PM8:15 PM8:30 PM8:45 PM9:00 PM9:15 PM9:30 PM9:45 PM10:00 PM10:15 PM10:30 PM10:45 PM11:00 PM11:15 PM11:30 PM11:45 PMTimeVisit TypePatient NameAppointment TypeProviderReason For VisitLocationForm StatusInsurance EligibilityActionNo Records Available Current page: 1Rows per page:250–0 of 0 | FiltersJune 2025SMTWTFS123456789101112131415161718192021222324252627282930Search By Patient​Search By Provider​LocationsAllNewYork clinicClearStatusAllScheduledChecked InIn ExamSigned OffConfirmedNo ShowCancelledClearAppointment TypeAllInstantAdministrativeCare CoordinationFollow-Up VisitMedication BriefNew Patient VisitNursing OnlyTelephone CallUrgent VisitVideo VisitWellness ExamClearModeAllTelehealthIn OfficeClearTodayJune 29 – July 05​Schedule Appointment29 Sun30 Mon01 Tue02 Wed03 Thu04 Fri05 Sat12:00 AM12:15 AM12:30 AM12:45 AM1:00 AM1:15 AM1:30 AM1:45 AM2:00 AM2:15 AM2:30 AM2:45 AM3:00 AM3:15 AM3:30 AM3:45 AM4:00 AM4:15 AM4:30 AM4:45 AM5:00 AM5:15 AM5:30 AM5:45 AM6:00 AM6:15 AM6:30 AM6:45 AM7:00 AM7:15 AM7:30 AM7:45 AM8:00 AM8:15 AM8:30 AM8:45 AM9:00 AM9:15 AM9:30 AM9:45 AM10:00 AM10:15 AM10:30 AM10:45 AM11:00 AM11:15 AM11:30 AM11:45 AM12:00 PM12:15 PM12:30 PM12:45 PM1:00 PM1:15 PM1:30 PM1:45 PM2:00 PM2:15 PM2:30 PM2:45 PM3:00 PM3:15 PM3:30 PM3:45 PM4:00 PM4:15 PM4:30 PM4:45 PM5:00 PM5:15 PM5:30 PM5:45 PM6:00 PM6:15 PM6:30 PM6:45 PM7:00 PM7:15 PM7:30 PM7:45 PM8:00 PM8:15 PM8:30 PM8:45 PM9:00 PM9:15 PM9:30 PM9:45 PM10:00 PM10:15 PM10:30 PM10:45 PM11:00 PM11:15 PM11:30 PM11:45 PMTimeVisit TypePatient NameAppointment TypeProviderReason For VisitLocationForm StatusInsurance EligibilityActionNo Records Available Current page: 1Rows per page:250–0 of 0 | FiltersJune 2025SMTWTFS123456789101112131415161718192021222324252627282930Search By Patient​Search By Provider​LocationsAllNewYork clinicClearStatusAllScheduledChecked InIn ExamSigned OffConfirmedNo ShowCancelledClearAppointment TypeAllInstantAdministrativeCare CoordinationFollow-Up VisitMedication BriefNew Patient VisitNursing OnlyTelephone CallUrgent VisitVideo VisitWellness ExamClearModeAllTelehealthIn OfficeClear | June 2025SMTWTFS123456789101112131415161718192021222324252627282930Search By Patient​Search By Provider​LocationsAllNewYork clinicClearStatusAllScheduledChecked InIn ExamSigned OffConfirmedNo ShowCancelledClearAppointment TypeAllInstantAdministrativeCare CoordinationFollow-Up VisitMedication BriefNew Patient VisitNursing OnlyTelephone CallUrgent VisitVideo VisitWellness ExamClearModeAllTelehealthIn OfficeClear
+[SUCCESS] ✅ Selected slot using selector: div[class*='MuiBox-root']:not(:has-text('No Slots')):has-text('AM')
+[INFO]    📝 Selected slot text: "DashboardSchedulingPatientsCommunicationsCollaborationBillingReportsLibrarySettingsCreate​FiltersJune 2025SMTWTFS123456789101112131415161718192021222324252627282930Search By Patient​Search By Provider​LocationsAllNewYork clinicClearStatusAllScheduledChecked InIn ExamSigned OffConfirmedNo ShowCancelledClearAppointment TypeAllInstantAdministrativeCare CoordinationFollow-Up VisitMedication BriefNew Patient VisitNursing OnlyTelephone CallUrgent VisitVideo VisitWellness ExamClearModeAllTelehealthIn OfficeClearTodayJune 29 – July 05​Schedule Appointment29 Sun30 Mon01 Tue02 Wed03 Thu04 Fri05 Sat12:00 AM12:15 AM12:30 AM12:45 AM1:00 AM1:15 AM1:30 AM1:45 AM2:00 AM2:15 AM2:30 AM2:45 AM3:00 AM3:15 AM3:30 AM3:45 AM4:00 AM4:15 AM4:30 AM4:45 AM5:00 AM5:15 AM5:30 AM5:45 AM6:00 AM6:15 AM6:30 AM6:45 AM7:00 AM7:15 AM7:30 AM7:45 AM8:00 AM8:15 AM8:30 AM8:45 AM9:00 AM9:15 AM9:30 AM9:45 AM10:00 AM10:15 AM10:30 AM10:45 AM11:00 AM11:15 AM11:30 AM11:45 AM12:00 PM12:15 PM12:30 PM12:45 PM1:00 PM1:15 PM1:30 PM1:45 PM2:00 PM2:15 PM2:30 PM2:45 PM3:00 PM3:15 PM3:30 PM3:45 PM4:00 PM4:15 PM4:30 PM4:45 PM5:00 PM5:15 PM5:30 PM5:45 PM6:00 PM6:15 PM6:30 PM6:45 PM7:00 PM7:15 PM7:30 PM7:45 PM8:00 PM8:15 PM8:30 PM8:45 PM9:00 PM9:15 PM9:30 PM9:45 PM10:00 PM10:15 PM10:30 PM10:45 PM11:00 PM11:15 PM11:30 PM11:45 PMTimeVisit TypePatient NameAppointment TypeProviderReason For VisitLocationForm StatusInsurance EligibilityActionNo Records Available Current page: 1Rows per page:250–0 of 0"
+[INFO] Debug screenshot taken
+
+[[ATTACHMENT|../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|../test-results/healthcare-workflow-legacy-73a71-er-Patient-AND-Availability-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+<system-err>
+<![CDATA[[ERROR] Screenshot saved for failed test: 04. Book Appointment - REQUIRES: Provider, Patient, AND Availability
+[ERROR] Page was closed unexpectedly
+[ERROR] Appointment booking failed: locator.count: Target page, context or browser has been closed
+[ERROR] Debug screenshot failed: page.screenshot: Target page, context or browser has been closed
+[ERROR] Appointment booking failed: locator.click: Timeout 60000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: 'Save And Close' })[22m
+
+[ERROR] Screenshot saved for failed test: 04. Book Appointment - REQUIRES: Provider, Patient, AND Availability
+[ERROR] Page was closed unexpectedly
+]]>
+</system-err>
+</testcase>
+<testcase name="Cleanup › Manual Cleanup - Run only when needed" classname="healthcare-workflow-legacy.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>
