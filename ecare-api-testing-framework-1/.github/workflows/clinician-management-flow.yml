@@ -19,9 +19,11 @@ jobs:
         with:
           node-version: '18'
 
-      - name: List files for debug
+      - name: Print working directory
+        run: pwd
+
+      - name: List files in current directory
         run: ls -l
-        working-directory: .
 
       - name: Install dependencies
         run: npm install
