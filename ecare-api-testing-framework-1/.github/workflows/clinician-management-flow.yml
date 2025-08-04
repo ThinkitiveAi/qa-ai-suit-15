@@ -24,17 +24,11 @@ jobs:
         working-directory: .
 
       - name: Install dependencies
-        run: npm install
-        working-directory: ecare-api-testing-framework-1
-
+        run: cd ecare-api-testing-framework-1 && npm install
       - name: Install Playwright Browsers
-        run: npx playwright install
-        working-directory: ecare-api-testing-framework-1
-
+        run: cd ecare-api-testing-framework-1 && npx playwright install
       - name: Run Playwright tests
-        run: npx playwright test tests/clinician-management.spec.js
-        working-directory: ecare-api-testing-framework-1
-
+        run: cd ecare-api-testing-framework-1 && npx playwright test tests/clinician-management.spec.js
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
