@@ -2,9 +2,9 @@ name: Run Clinician Management Flow
 
 on:
   push:
-    branches: [ main ]
+    branches: [ Sainath_Gaikwad ]
   pull_request:
-    branches: [ main ]
+    branches: [ Sainath_Gaikwad ]
 
 jobs:
   run-clinician-management-flow:
