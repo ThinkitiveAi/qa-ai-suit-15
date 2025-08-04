@@ -19,6 +19,10 @@ jobs:
         with:
           node-version: '18'
 
+      - name: List files for debug
+        run: ls -R
+        working-directory: .
+
       - name: Install dependencies
         run: npm install
         working-directory: ecare-api-testing-framework-1
