@@ -29,15 +29,15 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: qa-ai-suit-15/ecare-api-testing-framework-1
+        working-directory: ecare-api-testing-framework-1
 
       - name: Install Playwright Browsers
         run: npx playwright install
-        working-directory: qa-ai-suit-15/ecare-api-testing-framework-1
+        working-directory: ecare-api-testing-framework-1
 
       - name: Run Playwright tests
         run: npx playwright test tests/clinician-management.spec.js
-        working-directory: qa-ai-suit-15/ecare-api-testing-framework-1
+        working-directory: ecare-api-testing-framework-1
 
       - name: Upload Playwright report
         if: always()
