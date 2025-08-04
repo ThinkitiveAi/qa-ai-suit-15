@@ -36,7 +36,7 @@ jobs:
         working-directory: UI automation code with playwright
 
       - name: Run Playwright tests
-        run: npx playwright test tests/healthcare-workflow-legacy.spec.ts --headed=false --browser=chromium
+        run: npx playwright test tests/healthcare-workflow-legacy.spec.ts --browser=chromium
         working-directory: UI automation code with playwright
 
       - name: Upload Playwright report
