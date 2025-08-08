@@ -4,7 +4,7 @@ import { test, expect, APIRequestContext } from '@playwright/test';
 // Test configuration
 const BASE_URL = 'https://stage-api.ecarehealth.com';
 
-// Test state to store created entities and tokens
+// Simple state to store created entities and tokens (with CI persistence)
 let testState = {
   bearerToken: '',
   providerId: '',
@@ -13,6 +13,22 @@ let testState = {
   encounterId: '',
   zoomToken: ''
 };
+
+// Load state from global for CI retries
+function loadState() {
+  if (typeof globalThis !== 'undefined' && (globalThis as any).__testState) {
+    const stored = (globalThis as any).__testState;
+    testState = { ...testState, ...stored };
+    console.log('📦 Restored state from previous run:', Object.keys(stored).filter(k => stored[k]));
+  }
+}
+
+// Save state to global for CI retries
+function saveState() {
+  if (typeof globalThis !== 'undefined') {
+    (globalThis as any).__testState = { ...testState };
+  }
+}
 
 // Helper function to generate unique test data
 function generateTestData() {
@@ -46,10 +62,11 @@ function getFutureAppointmentTime() {
 }
 
 test.describe('Complete Clinician Management Workflow', () => {
-  let apiContext;
+  let apiContext: APIRequestContext;
 
   test.beforeAll(async ({ playwright }) => {
     console.log('🚀 Starting Complete Clinician Management Workflow Tests');
+    loadState(); // Load any existing state from previous retries
   });
 
   test.afterAll(async ({}) => {
@@ -60,6 +77,29 @@ test.describe('Complete Clinician Management Workflow', () => {
 
   test('Step 1: Login and Get Authentication Token', async ({ playwright }) => {
     console.log('\n🔐 Step 1: Authenticating...');
+    
+    // Skip if we already have a valid token (for CI retries)
+    if (testState.bearerToken) {
+      console.log('✅ Using existing authentication token');
+      // Create authenticated context with existing token
+      apiContext = await playwright.request.newContext({
+        baseURL: BASE_URL,
+        extraHTTPHeaders: {
+          'Authorization': `Bearer ${testState.bearerToken}`,
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Content-Type': 'application/json',
+          'Origin': BASE_URL,
+          'Referer': `${BASE_URL}/`,
+          'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+          'X-TENANT-ID': 'stage_aithinkitive',
+          'sec-ch-ua': '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Linux"'
+        }
+      });
+      return;
+    }
     
     // Create initial context for login
     const loginContext = await playwright.request.newContext({
@@ -87,6 +127,7 @@ test.describe('Complete Clinician Management Workflow', () => {
     expect(loginResult.data).toHaveProperty('access_token');
     
     testState.bearerToken = loginResult.data.access_token;
+    saveState(); // Save state for CI retries
     console.log('✅ Authentication successful, token received');
 
     // Dispose of login context
@@ -113,6 +154,12 @@ test.describe('Complete Clinician Management Workflow', () => {
 
   test('Step 2: Create Provider', async ({ playwright }) => {
     console.log('\n👨‍⚕️ Step 2: Creating Provider...');
+    
+    // Skip if we already have a provider ID (for CI retries)
+    if (testState.providerId) {
+      console.log(`✅ Using existing provider ID: ${testState.providerId}`);
+      return;
+    }
     
     // Ensure we have API context
     if (!apiContext) {
@@ -198,7 +245,7 @@ test.describe('Complete Clinician Management Workflow', () => {
     console.log('Fetching provider list to find the newly created provider...');
     
     // Wait a moment for the provider to be indexed
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, process.env.CI ? 3000 : 1000));
     
     // Get provider list - try different approaches
     let providerId = null;
@@ -278,6 +325,7 @@ test.describe('Complete Clinician Management Workflow', () => {
     }
     
     testState.providerId = providerId;
+    saveState(); // Save state for CI retries
     console.log(`✅ Provider created successfully with ID: ${testState.providerId}`);
   });
 
@@ -383,6 +431,13 @@ test.describe('Complete Clinician Management Workflow', () => {
 
   test('Step 4: Create Patient', async () => {
     console.log('\n🧑‍⚕️ Step 4: Creating Patient...');
+    
+    // Skip if we already have a patient ID (for CI retries)
+    if (testState.patientId) {
+      console.log(`✅ Using existing patient ID: ${testState.patientId}`);
+      return;
+    }
+    
     const { patient } = generateTestData();
     
     const patientData = {
@@ -499,7 +554,7 @@ test.describe('Complete Clinician Management Workflow', () => {
       console.log('Patient ID not found in response. Fetching patient list...');
       
       // Wait a moment for the patient to be indexed
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, process.env.CI ? 3000 : 1000));
       
       try {
         const listResponse = await apiContext.get('/api/master/patient', {
@@ -561,11 +616,19 @@ test.describe('Complete Clinician Management Workflow', () => {
     }
     
     testState.patientId = patientId;
+    saveState(); // Save state for CI retries
     console.log(`✅ Patient created successfully with ID: ${testState.patientId}`);
   });
 
   test('Step 5: Book Appointment', async () => {
     console.log('\n📅 Step 5: Booking Appointment...');
+    
+    // Skip if we already have an appointment ID (for CI retries)
+    if (testState.appointmentId) {
+      console.log(`✅ Using existing appointment ID: ${testState.appointmentId}`);
+      return;
+    }
+    
     expect(testState.providerId).toBeTruthy();
     expect(testState.patientId).toBeTruthy();
 
@@ -615,7 +678,7 @@ test.describe('Complete Clinician Management Workflow', () => {
     console.log('Fetching appointment list to find the newly created appointment...');
     
     // Wait a moment for the appointment to be indexed
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, process.env.CI ? 3000 : 1000));
     
     let appointmentId = null;
     
@@ -670,6 +733,7 @@ test.describe('Complete Clinician Management Workflow', () => {
     }
     
     testState.appointmentId = appointmentId;
+    saveState(); // Save state for CI retries
     console.log(`✅ Appointment booked successfully with ID: ${testState.appointmentId}`);
   });
 
@@ -719,6 +783,7 @@ test.describe('Complete Clinician Management Workflow', () => {
     if (response.ok()) {
       const tokenData = await response.json();
       testState.zoomToken = tokenData.token || '';
+      saveState(); // Save state for CI retries
       console.log('✅ Zoom token fetched successfully');
     } else {
       console.log('⚠️ Zoom token fetch skipped (appointment may not be ready for telehealth)');
@@ -727,6 +792,13 @@ test.describe('Complete Clinician Management Workflow', () => {
 
   test('Step 9: Save Encounter Summary', async () => {
     console.log('\n💬 Step 9: Saving Encounter Summary...');
+    
+    // Skip if we already have an encounter ID (for CI retries)
+    if (testState.encounterId) {
+      console.log(`✅ Using existing encounter ID: ${testState.encounterId}`);
+      return;
+    }
+    
     expect(testState.appointmentId).toBeTruthy();
     expect(testState.patientId).toBeTruthy();
 
@@ -772,7 +844,8 @@ test.describe('Complete Clinician Management Workflow', () => {
     // Since the API returns data: null, we need to fetch the encounter
     console.log('Fetching encounter summary to find the newly created encounter...');
     
-    // Wait a moment for the encounter to be indexed    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Wait a moment for the encounter to be indexed
+    await new Promise(resolve => setTimeout(resolve, process.env.CI ? 3000 : 1000));
     
     let encounterId: string | null = null;
     
@@ -862,7 +935,8 @@ test.describe('Complete Clinician Management Workflow', () => {
       console.log('Using placeholder encounter ID for testing:', encounterId);
     }
     
-    testState.encounterId = encounterId || '';
+    testState.encounterId = encounterId;
+    saveState(); // Save state for CI retries
     console.log(`✅ Encounter summary processed with ID: ${testState.encounterId}`);
   });
 
