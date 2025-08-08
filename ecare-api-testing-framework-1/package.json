@@ -1,41 +1,57 @@
 {
-  "name": "ecare-api-testing-framework",
+  "name": "clinician-management-api-tests",
   "version": "1.0.0",
-  "description": "Playwright API Testing Framework for ECareHealth Clinician Management",
+  "description": "Playwright API test framework for Clinician Management CRUD operations",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test",
-    "test:debug": "npx playwright test --debug",
-    "test:ui": "npx playwright test --ui",
-    "test:headed": "npx playwright test --headed",
-    "test:report": "npx playwright show-report",
-    "test:staging": "TEST_ENV=staging npx playwright test",
-    "test:prod": "TEST_ENV=production npx playwright test",
-    "test:dev": "TEST_ENV=development npx playwright test",
-    "install:browsers": "npx playwright install",
-    "setup": "node scripts/setup.js",
-    "discover-endpoints": "node scripts/discover-endpoints.js",
-    "update-token": "node scripts/token-helper.js",
-    "test-auth": "node scripts/test-auth.js",
-        "check-availability": "node scripts/check-availability.js"
-
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "test:specific": "playwright test -g",
+    "test:parallel": "playwright test --workers=4",
+    "test:sequential": "playwright test --workers=1",
+    "test:complete-workflow": "playwright test -g 'Complete Clinician Management Workflow'",
+    "test:auth": "playwright test -g 'Login and Get Authentication'",
+    "test:provider": "playwright test -g 'Create Provider'",
+    "test:patient": "playwright test -g 'Create Patient'",
+    "test:appointment": "playwright test -g 'Book Appointment'",
+    "test:encounter": "playwright test -g 'Encounter'",
+    "test:extended": "playwright test -g 'Extended Workflow'",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write '**/*.{ts,js,json}'",
+    "prepare": "husky install",
+    "pretest": "npm run lint",
+    "posttest": "npm run test:report"
   },
   "keywords": [
     "playwright",
     "api-testing",
+    "healthcare",
     "automation",
-    "healthcare"
+    "crud-operations"
   ],
   "author": "Your Name",
-  "license": "MIT",
+  "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
-    "@types/node": "^20.0.0"
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.19.9",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-playwright": "^0.20.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "dotenv": "^16.0.0",
-    "faker": "^6.6.6",
-    "moment": "^2.29.4",
-    "playwright": "^1.54.1"
+    "moment": "^2.30.1",
+    "winston": "^3.11.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

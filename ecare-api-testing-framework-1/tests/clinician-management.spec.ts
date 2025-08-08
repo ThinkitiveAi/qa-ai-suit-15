@@ -774,7 +774,7 @@ test.describe('Complete Clinician Management Workflow', () => {
     
     // Wait a moment for the encounter to be indexed    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    let encounterId = null;
+    let encounterId: string | null = null;
     
     try {
       // Approach 1: Get encounter summary by appointment ID
@@ -818,10 +818,11 @@ test.describe('Complete Clinician Management Workflow', () => {
         });
         
         if (listResponse.ok()) {
-          const listData = await listResponse.json();          console.log('Encounter list response:', JSON.stringify(listData, null, 2).substring(0, 1000));
+          const listData = await listResponse.json();
+          console.log('Encounter list response:', JSON.stringify(listData, null, 2).substring(0, 1000));
           
           // Check for different response structures
-          let encounters = [];
+          let encounters: any[] = [];
           if (listData.data && listData.data.content) {
             encounters = listData.data.content;
           } else if (listData.content) {
@@ -861,7 +862,7 @@ test.describe('Complete Clinician Management Workflow', () => {
       console.log('Using placeholder encounter ID for testing:', encounterId);
     }
     
-    testState.encounterId = encounterId;
+    testState.encounterId = encounterId || '';
     console.log(`✅ Encounter summary processed with ID: ${testState.encounterId}`);
   });
 
