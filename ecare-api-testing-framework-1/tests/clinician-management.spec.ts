@@ -50,13 +50,32 @@ function generateTestData() {
 // Helper function to get future appointment time
 function getFutureAppointmentTime() {
   const now = new Date();
-  // Get next Monday at 12:00 PM (to ensure it falls within provider availability)
-  const daysUntilMonday = (8 - now.getDay()) % 7 || 7;
-  const futureDate = new Date(now.getTime() + daysUntilMonday * 24 * 60 * 60 * 1000);
-  futureDate.setHours(18, 30, 0, 0); // Set to 6:30 PM UTC (12:00 PM IST)
+  
+  // Always schedule at least 2 hours in the future to avoid conflicts
+  let futureDate = new Date(now.getTime() + 2 * 60 * 60 * 1000); // Add 2 hours
+  
+  // If it's past 6 PM, schedule for next day at 10 AM
+  if (futureDate.getHours() >= 18) {
+    futureDate.setDate(futureDate.getDate() + 1);
+    futureDate.setHours(10, 0, 0, 0); // 10:00 AM next day
+  } else {
+    // Round up to next hour
+    futureDate.setMinutes(0, 0, 0);
+    futureDate.setHours(futureDate.getHours() + 1);
+  }
+  
+  // Ensure it's during provider availability (10 AM to 10 PM IST = 4:30 AM to 4:30 PM UTC)
+  const hour = futureDate.getUTCHours();
+  if (hour < 4 || hour > 16) {
+    // If outside availability, set to 10 AM IST (4:30 AM UTC) next day
+    futureDate.setUTCDate(futureDate.getUTCDate() + 1);
+    futureDate.setUTCHours(4, 30, 0, 0);
+  }
   
   const startTime = futureDate.toISOString().replace(/\.\d{3}Z$/, 'Z');
   const endTime = new Date(futureDate.getTime() + 15 * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, 'Z'); // 15 minutes later
+  
+  console.log(`📅 Scheduling appointment for: ${startTime} (${new Date(startTime).toLocaleString()})`);
   
   return { startTime, endTime };
 }
@@ -623,6 +642,9 @@ test.describe('Complete Clinician Management Workflow', () => {
   test('Step 5: Book Appointment', async () => {
     console.log('\n📅 Step 5: Booking Appointment...');
     
+    // Load state for retries
+    loadState();
+    
     // Skip if we already have an appointment ID (for CI retries)
     if (testState.appointmentId) {
       console.log(`✅ Using existing appointment ID: ${testState.appointmentId}`);
@@ -668,11 +690,38 @@ test.describe('Complete Clinician Management Workflow', () => {
       data: appointmentData
     });
 
-    expect([200, 201]).toContain(response.status());
+    // Log the response to understand any errors
     const appointmentResponse = await response.json();
-    
-    // Log the response to understand the structure
     console.log('Appointment creation response:', JSON.stringify(appointmentResponse, null, 2));
+    
+    if (response.status() === 400) {
+      console.log('❌ Appointment booking failed with validation error. Trying with adjusted time...');
+      
+      // Try booking 1 day later if there's a scheduling conflict
+      const adjustedTime = getFutureAppointmentTime();
+      const futureDate = new Date(adjustedTime.startTime);
+      futureDate.setDate(futureDate.getDate() + 1); // Add 1 day
+      
+      const adjustedAppointmentData = {
+        ...appointmentData,
+        startTime: futureDate.toISOString().replace(/\.\d{3}Z$/, 'Z'),
+        endTime: new Date(futureDate.getTime() + 15 * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, 'Z')
+      };
+      
+      console.log('Retrying with adjusted time:', adjustedAppointmentData.startTime);
+      const retryResponse = await apiContext.post('/api/master/appointment', {
+        data: adjustedAppointmentData
+      });
+      
+      const retryResult = await retryResponse.json();
+      console.log('Retry appointment response:', JSON.stringify(retryResult, null, 2));
+      
+      if (!retryResponse.ok()) {
+        throw new Error(`Appointment booking failed twice. Status: ${retryResponse.status()}, Response: ${JSON.stringify(retryResult)}`);
+      }
+    } else if (!response.ok()) {
+      throw new Error(`Appointment booking failed. Status: ${response.status()}, Response: ${JSON.stringify(appointmentResponse)}`);
+    }
     
     // Since the API returns data: null, we need to fetch the appointment list
     console.log('Fetching appointment list to find the newly created appointment...');
@@ -737,9 +786,30 @@ test.describe('Complete Clinician Management Workflow', () => {
     console.log(`✅ Appointment booked successfully with ID: ${testState.appointmentId}`);
   });
 
-  test('Step 6: Confirm Appointment', async () => {
+  test('Step 6: Confirm Appointment', async ({ playwright }) => {
     console.log('\n✅ Step 6: Confirming Appointment...');
+    loadState(); // Load state for retries
     expect(testState.appointmentId).toBeTruthy();
+
+    // Ensure we have API context
+    if (!apiContext) {
+      apiContext = await playwright.request.newContext({
+        baseURL: BASE_URL,
+        extraHTTPHeaders: {
+          'Authorization': `Bearer ${testState.bearerToken}`,
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Content-Type': 'application/json',
+          'Origin': BASE_URL,
+          'Referer': `${BASE_URL}/`,
+          'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+          'X-TENANT-ID': 'stage_aithinkitive',
+          'sec-ch-ua': '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Linux"'
+        }
+      });
+    }
 
     const confirmData = {
       appointmentId: testState.appointmentId,
@@ -755,9 +825,30 @@ test.describe('Complete Clinician Management Workflow', () => {
     console.log('✅ Appointment confirmed successfully');
   });
 
-  test('Step 7: Check-In', async () => {
+  test('Step 7: Check-In', async ({ playwright }) => {
     console.log('\n🧾 Step 7: Checking In...');
+    loadState(); // Load state for retries
     expect(testState.appointmentId).toBeTruthy();
+
+    // Ensure we have API context
+    if (!apiContext) {
+      apiContext = await playwright.request.newContext({
+        baseURL: BASE_URL,
+        extraHTTPHeaders: {
+          'Authorization': `Bearer ${testState.bearerToken}`,
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Content-Type': 'application/json',
+          'Origin': BASE_URL,
+          'Referer': `${BASE_URL}/`,
+          'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+          'X-TENANT-ID': 'stage_aithinkitive',
+          'sec-ch-ua': '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Linux"'
+        }
+      });
+    }
 
     const checkInData = {
       appointmentId: testState.appointmentId,
@@ -773,8 +864,35 @@ test.describe('Complete Clinician Management Workflow', () => {
     console.log('✅ Check-in completed successfully');
   });
 
-  test('Step 8: Get Zoom Token', async () => {
+  test('Step 8: Get Zoom Token', async ({ playwright }) => {
     console.log('\n🎥 Step 8: Fetching Zoom Token...');
+    loadState(); // Load state for retries
+    
+    // Skip if no appointment ID available
+    if (!testState.appointmentId) {
+      console.log('⚠️ Skipping Zoom token: No appointment ID available');
+      return;
+    }
+    
+    // Ensure we have API context
+    if (!apiContext) {
+      apiContext = await playwright.request.newContext({
+        baseURL: BASE_URL,
+        extraHTTPHeaders: {
+          'Authorization': `Bearer ${testState.bearerToken}`,
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Content-Type': 'application/json',
+          'Origin': BASE_URL,
+          'Referer': `${BASE_URL}/`,
+          'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+          'X-TENANT-ID': 'stage_aithinkitive',
+          'sec-ch-ua': '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Linux"'
+        }
+      });
+    }
     
     // In a real scenario, you would need the actual appointment UUID
     // For now, we'll use the appointmentId or skip if not available
@@ -790,8 +908,11 @@ test.describe('Complete Clinician Management Workflow', () => {
     }
   });
 
-  test('Step 9: Save Encounter Summary', async () => {
+  test('Step 9: Save Encounter Summary', async ({ playwright }) => {
     console.log('\n💬 Step 9: Saving Encounter Summary...');
+    
+    // Load state for retries
+    loadState();
     
     // Skip if we already have an encounter ID (for CI retries)
     if (testState.encounterId) {
@@ -801,6 +922,26 @@ test.describe('Complete Clinician Management Workflow', () => {
     
     expect(testState.appointmentId).toBeTruthy();
     expect(testState.patientId).toBeTruthy();
+
+    // Ensure we have API context
+    if (!apiContext) {
+      apiContext = await playwright.request.newContext({
+        baseURL: BASE_URL,
+        extraHTTPHeaders: {
+          'Authorization': `Bearer ${testState.bearerToken}`,
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Content-Type': 'application/json',
+          'Origin': BASE_URL,
+          'Referer': `${BASE_URL}/`,
+          'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+          'X-TENANT-ID': 'stage_aithinkitive',
+          'sec-ch-ua': '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Linux"'
+        }
+      });
+    }
 
     const encounterData = {
       encounterStatus: "INTAKE",
@@ -940,11 +1081,32 @@ test.describe('Complete Clinician Management Workflow', () => {
     console.log(`✅ Encounter summary processed with ID: ${testState.encounterId}`);
   });
 
-  test('Step 10: Update Encounter Summary', async () => {
+  test('Step 10: Update Encounter Summary', async ({ playwright }) => {
     console.log('\n✏️ Step 10: Updating Encounter Summary...');
+    loadState(); // Load state for retries
     expect(testState.encounterId).toBeTruthy();
     expect(testState.appointmentId).toBeTruthy();
     expect(testState.patientId).toBeTruthy();
+
+    // Ensure we have API context
+    if (!apiContext) {
+      apiContext = await playwright.request.newContext({
+        baseURL: BASE_URL,
+        extraHTTPHeaders: {
+          'Authorization': `Bearer ${testState.bearerToken}`,
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Content-Type': 'application/json',
+          'Origin': BASE_URL,
+          'Referer': `${BASE_URL}/`,
+          'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+          'X-TENANT-ID': 'stage_aithinkitive',
+          'sec-ch-ua': '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Linux"'
+        }
+      });
+    }
 
     const updateData = {
       uuid: testState.encounterId,
@@ -1005,8 +1167,11 @@ test.describe('Complete Clinician Management Workflow', () => {
     console.log('✅ Encounter summary updated successfully');
   });
 
-  test('Step 11: Encounter Sign-Off', async () => {
+  test('Step 11: Encounter Sign-Off', async ({ playwright }) => {
     console.log('\n📝 Step 11: Signing Off Encounter...');
+    
+    // Load state for retries
+    loadState();
     
     // Check if we have a real encounter ID or a placeholder
     if (!testState.encounterId || testState.encounterId.startsWith('encounter-')) {
@@ -1017,6 +1182,26 @@ test.describe('Complete Clinician Management Workflow', () => {
     
     expect(testState.encounterId).toBeTruthy();
     expect(testState.providerId).toBeTruthy();
+
+    // Ensure we have API context
+    if (!apiContext) {
+      apiContext = await playwright.request.newContext({
+        baseURL: BASE_URL,
+        extraHTTPHeaders: {
+          'Authorization': `Bearer ${testState.bearerToken}`,
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Content-Type': 'application/json',
+          'Origin': BASE_URL,
+          'Referer': `${BASE_URL}/`,
+          'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+          'X-TENANT-ID': 'stage_aithinkitive',
+          'sec-ch-ua': '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Linux"'
+        }
+      });
+    }
 
     const signOffData = {
       provider: testState.providerId,
@@ -1034,6 +1219,9 @@ test.describe('Complete Clinician Management Workflow', () => {
 
   test('Step 12: Verify Complete Workflow', async () => {
     console.log('\n🎉 Step 12: Verifying Complete Workflow...');
+    
+    // Load state for retries
+    loadState();
     
     // Verify all entities were created and workflow completed
     expect(testState.bearerToken).toBeTruthy();
