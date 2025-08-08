@@ -48,25 +48,3 @@ jobs:
           name: playwright-report
           path: ecare-api-testing-framework-1/playwright-report/
           retention-days: 30
-
-      - name: Send email notification
-        if: always()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: 'Clinician Management Flow - Test Report (${{ job.status }})'
-          body: |
-            The Clinician Management Flow tests have been executed on ${{ github.repository }}.
-            
-            Test Status: ${{ job.status }}
-            Commit: ${{ github.sha }}
-            Branch: ${{ github.ref }}
-            Triggered by: ${{ github.event_name }}
-            
-            Please find the attached test report for detailed results.
-          to: ${{ secrets.RECIPIENT_EMAIL }}
-          from: ${{ secrets.MAIL_USERNAME }}
-          attachments: ecare-api-testing-framework-1/playwright-report/index.html
