@@ -30,7 +30,7 @@ jobs:
         run: ls -l
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --ignore-scripts
         working-directory: ecare-api-testing-framework-1
 
       - name: Install Playwright Browsers
