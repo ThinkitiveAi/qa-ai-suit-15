@@ -1,0 +1,1 @@
+{"type":"about:blank","title":"Bad Request","status":400,"detail":"Failed to convert 'patientUuid' with value: 'stage_aithinkitive'","instance":"/api/master/patient-payment"}

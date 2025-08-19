@@ -1,0 +1,1 @@
+{"date":"2025-08-18T06:30:48.326+00:00","code":"ENTITY","message":null,"data":{"IN_PROGRESS":286,"TOTAL":1124,"COMPLETED":25,"PENDING":795,"NO_SHOW":18},"path":"/api/master/appointment/status-count","requestId":"fb9a57f1-af81-432f-bdb1-ddf6ecb458fc","version":"1.0"}
